@@ -1,0 +1,25 @@
+From aef4c27554589b33482a25d79dd22654f95a9f53 Mon Sep 17 00:00:00 2001
+From: "michal.lazo" <michal.lazo@memsource.com>
+Date: Tue, 10 Apr 2018 10:19:40 +0200
+Subject: [PATCH] default debug compilation flags for msvc -Od -Ob0
+
+---
+ mkspecs/common/msvc-desktop.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mkspecs/common/msvc-desktop.conf b/mkspecs/common/msvc-desktop.conf
+index 496ca11..0a6528b 100644
+--- a/mkspecs/common/msvc-desktop.conf
++++ b/mkspecs/common/msvc-desktop.conf
+@@ -36,7 +36,7 @@ QMAKE_CFLAGS_WARN_ON    = -W3
+ QMAKE_CFLAGS_WARN_OFF   = -W0
+ QMAKE_CFLAGS_RELEASE    = $$QMAKE_CFLAGS_OPTIMIZE -MD
+ QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO += $$QMAKE_CFLAGS_OPTIMIZE -Zi -MD
+-QMAKE_CFLAGS_DEBUG      = -Zi -MDd
++QMAKE_CFLAGS_DEBUG      = -Zi -MDd -Od -Ob0
+ QMAKE_CFLAGS_YACC       =
+ QMAKE_CFLAGS_LTCG       = -GL
+ 
+-- 
+2.9.2.windows.1
+

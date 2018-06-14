@@ -1,0 +1,37 @@
+From a40c6e96bf7a50a9718d349a062310b3a61bc33e Mon Sep 17 00:00:00 2001
+From: "michal.lazo" <michal.lazo@memsource.com>
+Date: Tue, 10 Apr 2018 10:15:12 +0200
+Subject: [PATCH] 10289 support CJK overwrite
+
+---
+ src/widgets/widgets/qwidgettextcontrol.cpp | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/src/widgets/widgets/qwidgettextcontrol.cpp b/src/widgets/widgets/qwidgettextcontrol.cpp
+index da6dcfb..6dff7f8 100644
+--- a/src/widgets/widgets/qwidgettextcontrol.cpp
++++ b/src/widgets/widgets/qwidgettextcontrol.cpp
+@@ -1984,8 +1984,18 @@ void QWidgetTextControlPrivate::inputMethodEvent(QInputMethodEvent *e)
+     // insert commit string
+     if (!e->commitString().isEmpty() || e->replacementLength()) {
+         QTextCursor c = cursor;
+-        c.setPosition(c.position() + e->replacementStart());
+-        c.setPosition(c.position() + e->replacementLength(), QTextCursor::KeepAnchor);
++        if (e->replacementLength()) {
++            c.setPosition(c.position() + e->replacementStart());
++            c.setPosition(c.position() + e->replacementLength(), QTextCursor::KeepAnchor);
++        } else if (overwriteMode) {
++            c.setPosition(c.position());
++            int selectionEndPos = c.position() + e->commitString().length();
++            c.setPosition(selectionEndPos, QTextCursor::KeepAnchor);
++            // move to end of document if we don't success with selectionEndPos
++            if (c.position() != selectionEndPos) {
++                c.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
++            }
++        }
+         c.insertText(e->commitString());
+     }
+ 
+-- 
+2.9.2.windows.1
+
