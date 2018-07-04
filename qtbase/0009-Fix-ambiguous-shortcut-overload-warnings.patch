@@ -1,0 +1,48 @@
+From a38c46ad852cd7ce376d50aa775590602a60f310 Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Tue, 27 Mar 2018 17:03:18 +0200
+Subject: Windows QPA: Fix ambiguous shortcut overload warnings for ALT-keys
+
+Use the match with the least modifiers (prefer Shift+9 over
+Alt + Shift + 9) resulting in more missing modifiers.
+
+Task-number: QTBUG-67200
+Change-Id: I90463c0dfaadda29dcd24a08ba35c91fac8bd04c
+Reviewed-by: Joerg Bornemann <joerg.bornemann@qt.io>
+Reviewed-by: Gatis Paeglis <gatis.paeglis@qt.io>
+Reviewed-by: Oliver Wolff <oliver.wolff@qt.io>
+---
+ src/plugins/platforms/windows/qwindowskeymapper.cpp | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+(limited to 'src/plugins/platforms/windows/qwindowskeymapper.cpp')
+
+diff --git a/src/plugins/platforms/windows/qwindowskeymapper.cpp b/src/plugins/platforms/windows/qwindowskeymapper.cpp
+index 6189fe32f1..2e44626112 100644
+--- a/src/plugins/platforms/windows/qwindowskeymapper.cpp
++++ b/src/plugins/platforms/windows/qwindowskeymapper.cpp
+@@ -1268,8 +1268,19 @@ QList<int> QWindowsKeyMapper::possibleKeys(const QKeyEvent *e) const
+     for (size_t i = 1; i < NumMods; ++i) {
+         Qt::KeyboardModifiers neededMods = ModsTbl[i];
+         quint32 key = kbItem.qtKey[i];
+-        if (key && key != baseKey && ((keyMods & neededMods) == neededMods))
+-            result << int(key + (keyMods & ~neededMods));
++        if (key && key != baseKey && ((keyMods & neededMods) == neededMods)) {
++            const Qt::KeyboardModifiers missingMods = keyMods & ~neededMods;
++            const int matchedKey = int(key) + missingMods;
++            const QList<int>::iterator it =
++                std::find_if(result.begin(), result.end(),
++                             [key] (int k) { return (k & ~Qt::KeyboardModifierMask) == key; });
++            // QTBUG-67200: Use the match with the least modifiers (prefer
++            // Shift+9 over Alt + Shift + 9) resulting in more missing modifiers.
++            if (it == result.end())
++                result << matchedKey;
++            else if (missingMods > (*it & Qt::KeyboardModifierMask))
++                *it = matchedKey;
++        }
+     }
+ 
+     return result;
+-- 
+cgit v1.1-6-g87c4
+
