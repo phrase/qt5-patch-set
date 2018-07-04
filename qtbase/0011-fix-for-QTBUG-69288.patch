@@ -1,0 +1,26 @@
+From 7ab4f28f3af477e685a0a63917a6edfe49eb99ff Mon Sep 17 00:00:00 2001
+From: "michal.lazo" <michal.lazo@memsource.com>
+Date: Wed, 4 Jul 2018 12:56:03 +0200
+Subject: [PATCH] fix for QTBUG-69288
+
+---
+ src/plugins/platforms/windows/qwindowskeymapper.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/plugins/platforms/windows/qwindowskeymapper.cpp b/src/plugins/platforms/windows/qwindowskeymapper.cpp
+index 3987d8c..7d23f86 100644
+--- a/src/plugins/platforms/windows/qwindowskeymapper.cpp
++++ b/src/plugins/platforms/windows/qwindowskeymapper.cpp
+@@ -1254,6 +1254,9 @@ QList<int> QWindowsKeyMapper::possibleKeys(const QKeyEvent *e) const
+         return result;
+     }
+     result << int(baseKey + keyMods); // The base key is _always_ valid, of course
++    if (baseKey != e->key()) {
++        result << int(e->key() + keyMods);
++    }
+ 
+     for (size_t i = 1; i < NumMods; ++i) {
+         Qt::KeyboardModifiers neededMods = ModsTbl[i];
+-- 
+2.9.2.windows.1
+
