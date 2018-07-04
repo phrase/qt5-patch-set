@@ -15,7 +15,7 @@ index 3987d8c..7d23f86 100644
          return result;
      }
      result << int(baseKey + keyMods); // The base key is _always_ valid, of course
-+    if (baseKey != e->key()) {
++    if (baseKey > 255 && baseKey != e->key()) {
 +        result << int(e->key() + keyMods);
 +    }
  
