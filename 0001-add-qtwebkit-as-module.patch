@@ -1,0 +1,27 @@
+From 1920b7297470b12ff237920789896b0d0d7a0070 Mon Sep 17 00:00:00 2001
+From: "michal.lazo" <michal.lazo@memsource.com>
+Date: Fri, 13 Jul 2018 16:09:27 +0200
+Subject: [PATCH] add qtwebkit as module
+
+---
+ .gitmodules | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/.gitmodules b/.gitmodules
+index 91fc6e4..c8b1164 100644
+--- a/.gitmodules
++++ b/.gitmodules
+@@ -316,3 +316,10 @@
+ 	url = ../qtwebglplugin.git
+ 	branch = 5.11.1
+ 	status = preview
++[submodule "qtwebkit"]
++	depends = qtbase
++	recommends = qtdeclarative qtxmlpatterns
++	path = qtwebkit
++	branch = 5.9
++	status = addon
++	project = WebKit.pro
+-- 
+2.9.2.windows.1
+
