@@ -31,7 +31,7 @@ index 70f7644..8a89889 100644
 +                layoutData->string.detach();
 +                string = reinterpret_cast<const ushort *>( layoutData->string.unicode() );
 +                uc = string + offset;
-+                e = uc + length;
++                e = string + length;
 +                *const_cast<ushort*>( uc ) = 0x3000;
 +            }
              break;
