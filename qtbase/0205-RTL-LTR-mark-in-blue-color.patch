@@ -1,23 +1,24 @@
-From 0048e8d9b11b4a62503bacc79c5bed24dc6731df Mon Sep 17 00:00:00 2001
+From ad4995d702b8ab562c5dfb8afcb5cb68721f7208 Mon Sep 17 00:00:00 2001
 From: "michal.lazo" <michal.lazo@memsource.com>
-Date: Thu, 26 Jul 2018 16:28:55 +0200
+Date: Fri, 27 Jul 2018 11:36:21 +0200
 Subject: [PATCH] RTL/LTR mark in blue color
 
 ---
- src/gui/text/qtextlayout.cpp | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ src/gui/text/qtextlayout.cpp | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/src/gui/text/qtextlayout.cpp b/src/gui/text/qtextlayout.cpp
-index 3cc6e58..684ee28 100644
+index 3cc6e58..01f39fb 100644
 --- a/src/gui/text/qtextlayout.cpp
 +++ b/src/gui/text/qtextlayout.cpp
-@@ -2634,8 +2634,10 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+@@ -2633,9 +2633,8 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+                 p->setPen(pen);
              } else if( ( eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators ) &&
                       si.analysis.flags == QScriptAnalysis::BidiOperator ) {
 -                QBrush c = format.foreground();
 -                if( c.style() != Qt::NoBrush )
 -                    p->setPen( c.color() );
-+                static const QColor bidiOperatorColor(23, 183, 255);
++                static const QColor bidiOperatorColor( 23, 183, 255 );
 +                p->setPen( bidiOperatorColor );
  
                  p->drawText( pos, QChar(si.analysis.bidiLevel%2? (ushort)0x21b0 : (ushort)0x21b1) );
