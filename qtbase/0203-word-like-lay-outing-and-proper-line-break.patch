@@ -1,6 +1,6 @@
-From ac75c1523447210f70fc138a9a041910cc961b08 Mon Sep 17 00:00:00 2001
+From 0f35e51d851df53d820c6cad6fefeecbadac2586 Mon Sep 17 00:00:00 2001
 From: "michal.lazo" <michal.lazo@memsource.com>
-Date: Fri, 20 Jul 2018 15:04:23 +0200
+Date: Fri, 27 Jul 2018 14:18:29 +0200
 Subject: [PATCH] word like lay-outing and proper line-break
 
 ---
@@ -69,7 +69,7 @@ index f9eb055..d7a09bb 100644
      enum BidiFlags {
          BidiBN = 1,
 diff --git a/src/gui/text/qtextlayout.cpp b/src/gui/text/qtextlayout.cpp
-index 6e824b2..a3777eb 100644
+index 3f0779e..a9b68d4 100644
 --- a/src/gui/text/qtextlayout.cpp
 +++ b/src/gui/text/qtextlayout.cpp
 @@ -1711,7 +1711,7 @@ namespace {
@@ -205,11 +205,6 @@ index 6e824b2..a3777eb 100644
 -            QPainterPrivate::get(p)->drawTextItem(pos, gf, eng);
 +            if ((eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators) &&
 +                si.analysis.flags == QScriptAnalysis::LineOrParagraphSeparator) {
-+
-+                QBrush c = format.foreground();
-+                if (c.style() != Qt::NoBrush)
-+                    p->setPen(c.color());
-+
 +                QChar visualLine;
 +                if ((index == eng->lines.size() - 1) && (eng->block.next().isValid() != false)) {
 +                    visualLine = (ushort)0xB6;
@@ -221,8 +216,13 @@ index 6e824b2..a3777eb 100644
 +                        visualLine = ((ushort)0x21a9);
 +                    }
 +                }
-+                p->drawText(pos, visualLine);
-+                p->setPen(pen);
++                if (visualLine.unicode()) {
++                    QBrush c = format.foreground();
++                    if(c.style() != Qt::NoBrush)
++                        p->setPen(c.color());
++                    p->drawText(pos, visualLine);
++                    p->setPen(pen);
++                }
 +            } else {
 +                QPainterPrivate::get(p)->drawTextItem(pos, gf, eng);
 +            }
