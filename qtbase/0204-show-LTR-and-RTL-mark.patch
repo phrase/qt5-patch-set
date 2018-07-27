@@ -1,16 +1,16 @@
-From cdf0894cfd278ff3be49021f693046a04c3a7b0b Mon Sep 17 00:00:00 2001
+From 1ac8b70141bcaba7acee2fa00f61d09c9be74916 Mon Sep 17 00:00:00 2001
 From: "michal.lazo" <michal.lazo@memsource.com>
-Date: Thu, 12 Jul 2018 16:02:25 +0200
+Date: Fri, 27 Jul 2018 14:31:48 +0200
 Subject: [PATCH] show LTR and RTL mark
 
 ---
  src/gui/text/qtextengine.cpp | 14 ++++++++++++--
  src/gui/text/qtextengine_p.h |  5 +++--
- src/gui/text/qtextlayout.cpp |  8 ++++++++
- 3 files changed, 23 insertions(+), 4 deletions(-)
+ src/gui/text/qtextlayout.cpp |  7 +++++++
+ 3 files changed, 22 insertions(+), 4 deletions(-)
 
 diff --git a/src/gui/text/qtextengine.cpp b/src/gui/text/qtextengine.cpp
-index 70f7644..8a89889 100644
+index 270689b..db96951 100644
 --- a/src/gui/text/qtextengine.cpp
 +++ b/src/gui/text/qtextengine.cpp
 @@ -2054,11 +2054,21 @@ void QTextEngine::itemize() const
@@ -55,20 +55,19 @@ index d7a09bb..8db8eb6 100644
      enum BidiFlags {
          BidiBN = 1,
 diff --git a/src/gui/text/qtextlayout.cpp b/src/gui/text/qtextlayout.cpp
-index c8dd6e1..b3689b2 100644
+index a9b68d4..c339430 100644
 --- a/src/gui/text/qtextlayout.cpp
 +++ b/src/gui/text/qtextlayout.cpp
-@@ -2632,6 +2632,14 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+@@ -2631,6 +2631,13 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+                     p->drawText(pos, visualLine);
+                     p->setPen(pen);
                  }
-                 p->drawText(pos, visualLine);
-                 p->setPen(pen);
 +            } else if( ( eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators ) &&
-+                     si.analysis.flags == QScriptAnalysis::BidiOperator ) {
-+                QBrush c = format.foreground();
-+                if( c.style() != Qt::NoBrush )
-+                    p->setPen( c.color() );
-+
-+                p->drawText( pos, QChar(si.analysis.bidiLevel%2? (ushort)0x21b0 : (ushort)0x21b1) );
++                si.analysis.flags == QScriptAnalysis::BidiOperator ) {
++                static const QColor bidiOperatorColor( 23, 183, 255 );
++                p->setPen( bidiOperatorColor );
++                
++                p->drawText( pos, QChar( si.analysis.bidiLevel % 2 ? (ushort)0x21b0 : (ushort)0x21b1 ) );
 +                p->setPen( pen );
              } else {
                  QPainterPrivate::get(p)->drawTextItem(pos, gf, eng);
