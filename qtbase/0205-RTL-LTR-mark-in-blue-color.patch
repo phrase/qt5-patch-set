@@ -14,13 +14,11 @@ index 3cc6e58..684ee28 100644
 @@ -2634,8 +2634,10 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
              } else if( ( eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators ) &&
                       si.analysis.flags == QScriptAnalysis::BidiOperator ) {
-                 QBrush c = format.foreground();
+-                QBrush c = format.foreground();
 -                if( c.style() != Qt::NoBrush )
 -                    p->setPen( c.color() );
-+                if( c.style() != Qt::NoBrush ) {
-+                    static const QColor bidiOperatorColor(23, 183, 255);
-+                    p->setPen( bidiOperatorColor );
-+                }
++                static const QColor bidiOperatorColor(23, 183, 255);
++                p->setPen( bidiOperatorColor );
  
                  p->drawText( pos, QChar(si.analysis.bidiLevel%2? (ushort)0x21b0 : (ushort)0x21b1) );
                  p->setPen( pen );
