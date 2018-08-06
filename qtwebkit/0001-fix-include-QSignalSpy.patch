@@ -30,7 +30,7 @@ index 8711d5b..5e74cb1 100644
  
  #include <QEventLoop>
 -#include <QSignalSpy>
-+#include <QtTest\QSignalSpy>
++#include <QtTest/QSignalSpy>
  #include <QTimer>
  
  class QQuickWebView;
