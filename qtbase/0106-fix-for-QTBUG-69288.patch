@@ -1,26 +1,25 @@
-From 7ab4f28f3af477e685a0a63917a6edfe49eb99ff Mon Sep 17 00:00:00 2001
+From b1b0637c03326ce0d7631554e60bd6c522bb90c2 Mon Sep 17 00:00:00 2001
 From: "michal.lazo" <michal.lazo@memsource.com>
-Date: Wed, 4 Jul 2018 12:56:03 +0200
+Date: Mon, 20 Aug 2018 13:13:48 +0200
 Subject: [PATCH] fix for QTBUG-69288
 
 ---
- src/plugins/platforms/windows/qwindowskeymapper.cpp | 3 +++
- 1 file changed, 3 insertions(+)
+ src/plugins/platforms/windows/qwindowskeymapper.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/plugins/platforms/windows/qwindowskeymapper.cpp b/src/plugins/platforms/windows/qwindowskeymapper.cpp
-index 3987d8c..7d23f86 100644
+index 950d8ec..80124b2 100644
 --- a/src/plugins/platforms/windows/qwindowskeymapper.cpp
 +++ b/src/plugins/platforms/windows/qwindowskeymapper.cpp
-@@ -1254,6 +1254,9 @@ QList<int> QWindowsKeyMapper::possibleKeys(const QKeyEvent *e) const
-         return result;
+@@ -702,7 +702,7 @@ void QWindowsKeyMapper::updatePossibleKeyCodes(unsigned char *kbdBuffer, quint32
+     quint32 fallbackKey = winceKeyBend(vk_key);
+     if (!fallbackKey || fallbackKey == Qt::Key_unknown) {
+         fallbackKey = 0;
+-        if (vk_key != keyLayout[vk_key].qtKey[0] && vk_key != keyLayout[vk_key].qtKey[1]
++        if (vk_key != keyLayout[vk_key].qtKey[0]
+             && vk_key < 0x5B && vk_key > 0x2F)
+             fallbackKey = vk_key;
      }
-     result << int(baseKey + keyMods); // The base key is _always_ valid, of course
-+    if (baseKey > 255 && baseKey != e->key()) {
-+        result << int(e->key() + keyMods);
-+    }
- 
-     for (size_t i = 1; i < NumMods; ++i) {
-         Qt::KeyboardModifiers neededMods = ModsTbl[i];
 -- 
 2.9.2.windows.1
 
