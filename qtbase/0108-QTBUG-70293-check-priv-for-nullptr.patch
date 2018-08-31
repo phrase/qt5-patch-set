@@ -1,0 +1,36 @@
+From 19328a4349a8c7584a840bfed3bb0306bfde290a Mon Sep 17 00:00:00 2001
+From: "michal.lazo" <michal.lazo@memsource.com>
+Date: Fri, 31 Aug 2018 14:43:51 +0200
+Subject: [PATCH] check priv for nullptr
+
+---
+ src/gui/text/qtextcursor.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/gui/text/qtextcursor.cpp b/src/gui/text/qtextcursor.cpp
+index f32c31d18e..4a48c3294b 100644
+--- a/src/gui/text/qtextcursor.cpp
++++ b/src/gui/text/qtextcursor.cpp
+@@ -65,7 +65,8 @@ QTextCursorPrivate::QTextCursorPrivate(QTextDocumentPrivate *p)
+       currentCharFormat(-1), visualNavigation(false), keepPositionOnInsert(false),
+       changed(false)
+ {
+-    priv->addCursor(this);
++    if (priv)
++        priv->addCursor(this);
+ }
+ 
+ QTextCursorPrivate::QTextCursorPrivate(const QTextCursorPrivate &rhs)
+@@ -80,7 +81,8 @@ QTextCursorPrivate::QTextCursorPrivate(const QTextCursorPrivate &rhs)
+     visualNavigation = rhs.visualNavigation;
+     keepPositionOnInsert = rhs.keepPositionOnInsert;
+     changed = rhs.changed;
+-    priv->addCursor(this);
++    if (priv)
++        priv->addCursor(this);
+ }
+ 
+ QTextCursorPrivate::~QTextCursorPrivate()
+-- 
+2.18.0.windows.1
+
