@@ -1,0 +1,25 @@
+From 942bff07cbf581f475d8fe28581a5296a986796c Mon Sep 17 00:00:00 2001
+From: "michal.lazo" <xxx@xxx.xxx>
+Date: Tue, 4 Sep 2018 16:08:47 +0200
+Subject: [PATCH] missing trailingSpaces in QTextLineItemIterator
+
+---
+ src/gui/text/qtextengine.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gui/text/qtextengine.cpp b/src/gui/text/qtextengine.cpp
+index 0c7aad789f..9ca34e0cee 100644
+--- a/src/gui/text/qtextengine.cpp
++++ b/src/gui/text/qtextengine.cpp
+@@ -3985,7 +3985,7 @@ QTextLineItemIterator::QTextLineItemIterator(QTextEngine *_eng, int _lineNum, co
+       line(eng->lines[_lineNum]),
+       si(0),
+       lineNum(_lineNum),
+-      lineEnd(line.from + line.length),
++      lineEnd(line.from + line.length + line.trailingSpaces),
+       firstItem(eng->findItem(line.from)),
+       lastItem(eng->findItem(lineEnd - 1, firstItem)),
+       nItems((firstItem >= 0 && lastItem >= firstItem)? (lastItem-firstItem+1) : 0),
+-- 
+2.18.0.windows.1
+
