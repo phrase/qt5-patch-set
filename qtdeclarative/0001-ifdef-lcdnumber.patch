@@ -1,0 +1,29 @@
+From c706d68bdc15f908c550605c0c475752647b1ede Mon Sep 17 00:00:00 2001
+From: "michal.lazo" <michal.lazo@memsource.com>
+Date: Tue, 11 Sep 2018 17:17:54 +0200
+Subject: [PATCH] ifdef lcdnumber
+
+---
+ examples/quick/quickwidgets/quickwidget/main.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/examples/quick/quickwidgets/quickwidget/main.cpp b/examples/quick/quickwidgets/quickwidget/main.cpp
+index c54586c5d..803e66493 100644
+--- a/examples/quick/quickwidgets/quickwidget/main.cpp
++++ b/examples/quick/quickwidgets/quickwidget/main.cpp
+@@ -88,10 +88,12 @@ MainWindow::MainWindow()
+ 
+     QMdiArea *centralWidget = new QMdiArea;
+ 
++#if QT_CONFIG(lcdnumber)
+     QLCDNumber *lcd = new QLCDNumber;
+     lcd->display(1337);
+     lcd->setMinimumSize(250,100);
+     centralWidget->addSubWindow(lcd);
++#endif
+ 
+     QUrl source("qrc:quickwidget/rotatingsquare.qml");
+ 
+-- 
+2.18.0.windows.1
+
