@@ -1,0 +1,99 @@
+From eddab82e65ce8b3ff4cf56e8492a3029dd8a1d11 Mon Sep 17 00:00:00 2001
+From: "michal.lazo" <michal.lazo@memsource.com>
+Date: Mon, 10 Sep 2018 16:30:42 +0200
+Subject: [PATCH] tests ifdef and qtConfig
+
+---
+ tests/auto/gui/painting/painting.pro                   | 3 ++-
+ tests/auto/network/access/access.pro                   | 9 ++++++++-
+ tests/auto/other/qaccessibility/tst_qaccessibility.cpp | 2 ++
+ tests/auto/widgets/widgets/widgets.pro                 | 7 +++++--
+ 4 files changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/tests/auto/gui/painting/painting.pro b/tests/auto/gui/painting/painting.pro
+index 831fffab30..6a9d8f2db0 100644
+--- a/tests/auto/gui/painting/painting.pro
++++ b/tests/auto/gui/painting/painting.pro
+@@ -9,13 +9,14 @@ SUBDIRS=\
+    qpagesize \
+    qpainter \
+    qpathclipper \
+-   qpdfwriter \
+    qpen \
+    qpaintengine \
+    qtransform \
+    qwmatrix \
+    qpolygon \
+ 
++qtConfig(pdf): SUBDIRS+= qpdfwriter
++
+ !qtConfig(private_tests): SUBDIRS -= \
+     qpathclipper \
+ 
+diff --git a/tests/auto/network/access/access.pro b/tests/auto/network/access/access.pro
+index b140b5e9f2..ea8e81c51e 100644
+--- a/tests/auto/network/access/access.pro
++++ b/tests/auto/network/access/access.pro
+@@ -9,12 +9,19 @@ SUBDIRS=\
+    qnetworkreply \
+    spdy \
+    qnetworkcachemetadata \
+-   qftp \
+    qhttpnetworkreply \
+    qabstractnetworkcache \
+    hpack \
+    http2 \
+    hsts
++   
++
++message($$QT_CONFIG)
++message($$enabled_features)
++message($$disabled_features)
++
++#qtConfig(ftp): SUBDIRS+= qftp
++contains(QT_CONFIG, ftp):SUBDIRS+= qftp
+ 
+ !qtConfig(private_tests): SUBDIRS -= \
+           qhttpnetworkconnection \
+diff --git a/tests/auto/other/qaccessibility/tst_qaccessibility.cpp b/tests/auto/other/qaccessibility/tst_qaccessibility.cpp
+index b5d45adadb..5cccf208a5 100644
+--- a/tests/auto/other/qaccessibility/tst_qaccessibility.cpp
++++ b/tests/auto/other/qaccessibility/tst_qaccessibility.cpp
+@@ -567,7 +567,9 @@ static QWidget *createWidgets()
+     box->addWidget(new QDoubleSpinBox(w));
+     box->addWidget(new QSpinBox(w));
+     box->addWidget(new QLabel(QLatin1String("widget text ") + QString::number(i++), w));
++#if QT_CONFIG(lcdnumber)
+     box->addWidget(new QLCDNumber(w));
++#endif
+     box->addWidget(new QStackedWidget(w));
+     box->addWidget(new QToolBox(w));
+     box->addWidget(new QLabel(QLatin1String("widget text ") + QString::number(i++), w));
+diff --git a/tests/auto/widgets/widgets/widgets.pro b/tests/auto/widgets/widgets/widgets.pro
+index c098108edc..b69f4e4912 100644
+--- a/tests/auto/widgets/widgets/widgets.pro
++++ b/tests/auto/widgets/widgets/widgets.pro
+@@ -20,7 +20,6 @@ SUBDIRS=\
+    qgroupbox \
+    qkeysequenceedit \
+    qlabel \
+-   qlcdnumber \
+    qlineedit \
+    qmainwindow \
+    qmdiarea \
+@@ -45,7 +44,11 @@ SUBDIRS=\
+    qtextedit \
+    qtoolbar \
+    qtoolbox \
+-   qtoolbutton \
++   qtoolbutton
++   
++
++
++contains(QT_CONFIG,lcdnumber):SUBDIRS+= qlcdnumber
+ 
+ # The following tests depend on private API:
+ !qtConfig(private_tests): SUBDIRS -= \
+-- 
+2.18.0.windows.1
+
