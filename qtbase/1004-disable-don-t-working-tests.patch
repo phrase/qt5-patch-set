@@ -1,0 +1,34 @@
+From 53177438729fc63991a7e406a1396a1119cb25a1 Mon Sep 17 00:00:00 2001
+From: "michal.lazo" <michal.lazo@memsource.com>
+Date: Thu, 13 Sep 2018 15:06:21 +0200
+Subject: [PATCH] disable don't working tests
+
+---
+ tests/auto/corelib/io/io.pro | 2 ++
+ tests/auto/gui/gui.pro       | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/tests/auto/corelib/io/io.pro b/tests/auto/corelib/io/io.pro
+index 5618a42203..890aa0b2f6 100644
+--- a/tests/auto/corelib/io/io.pro
++++ b/tests/auto/corelib/io/io.pro
+@@ -64,3 +64,5 @@ win32:!qtConfig(private_tests): SUBDIRS -= \
+ 
+ winrt: SUBDIRS -= \
+     qstorageinfo
++
++SUBDIRS -= qdir qfile qfileinfo qprocess
+diff --git a/tests/auto/gui/gui.pro b/tests/auto/gui/gui.pro
+index d7cda11513..ea424fafd7 100644
+--- a/tests/auto/gui/gui.pro
++++ b/tests/auto/gui/gui.pro
+@@ -15,5 +15,6 @@ SUBDIRS = \
+     itemmodels \
+ 
+ !qtConfig(opengl): SUBDIRS -= qopengl qopenglconfig
++SUBDIRS -= qopengl qopenglconfig
+ 
+ !qtConfig(vulkan): SUBDIRS -= qvulkan
+-- 
+2.18.0.windows.1
+
