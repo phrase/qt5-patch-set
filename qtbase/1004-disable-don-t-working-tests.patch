@@ -1,34 +1,33 @@
-From 53177438729fc63991a7e406a1396a1119cb25a1 Mon Sep 17 00:00:00 2001
+From d219588bd4edaac0d00eb23ecfc7fe46dce2fddb Mon Sep 17 00:00:00 2001
 From: "michal.lazo" <michal.lazo@memsource.com>
-Date: Thu, 13 Sep 2018 15:06:21 +0200
+Date: Fri, 21 Sep 2018 09:00:30 +0200
 Subject: [PATCH] disable don't working tests
 
 ---
  tests/auto/corelib/io/io.pro | 2 ++
- tests/auto/gui/gui.pro       | 1 +
- 2 files changed, 3 insertions(+)
+ tests/auto/gui/gui.pro       | 2 ++
+ 2 files changed, 4 insertions(+)
 
 diff --git a/tests/auto/corelib/io/io.pro b/tests/auto/corelib/io/io.pro
-index 5618a42203..890aa0b2f6 100644
+index 5eab944fe4..ab9dc7d486 100644
 --- a/tests/auto/corelib/io/io.pro
 +++ b/tests/auto/corelib/io/io.pro
-@@ -64,3 +64,5 @@ win32:!qtConfig(private_tests): SUBDIRS -= \
- 
- winrt: SUBDIRS -= \
-     qstorageinfo
+@@ -69,3 +69,5 @@ android: SUBDIRS -= \
+     qprocess \
+     qdir \
+     qresourceengine
 +
 +SUBDIRS -= qdir qfile qfileinfo qprocess
 diff --git a/tests/auto/gui/gui.pro b/tests/auto/gui/gui.pro
-index d7cda11513..ea424fafd7 100644
+index d7cda11513..759b41a783 100644
 --- a/tests/auto/gui/gui.pro
 +++ b/tests/auto/gui/gui.pro
-@@ -15,5 +15,6 @@ SUBDIRS = \
-     itemmodels \
- 
+@@ -17,3 +17,5 @@ SUBDIRS = \
  !qtConfig(opengl): SUBDIRS -= qopengl qopenglconfig
-+SUBDIRS -= qopengl qopenglconfig
  
  !qtConfig(vulkan): SUBDIRS -= qvulkan
++
++SUBDIRS -= qopengl qopenglconfig
 -- 
 2.18.0.windows.1
 
