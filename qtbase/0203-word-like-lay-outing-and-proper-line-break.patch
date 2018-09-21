@@ -1,20 +1,20 @@
-From c6b6b99f84a7d89714537fb5c0b6ebe15d012d2f Mon Sep 17 00:00:00 2001
+From d02967d1804ca7957a98cdf235965f96a423eaee Mon Sep 17 00:00:00 2001
 From: "michal.lazo" <michal.lazo@memsource.com>
-Date: Thu, 13 Sep 2018 15:21:25 +0200
+Date: Fri, 21 Sep 2018 08:50:29 +0200
 Subject: [PATCH] word like lay-outing and proper line-break
 
 ---
- src/gui/text/qtextengine.cpp |  23 +++-----
+ src/gui/text/qtextengine.cpp |  22 +++-----
  src/gui/text/qtextengine_p.h |   5 +-
  src/gui/text/qtextlayout.cpp | 102 ++++++++++++++++++++++++++++-------
  src/gui/text/qtextoption.h   |   1 +
- 4 files changed, 94 insertions(+), 37 deletions(-)
+ 4 files changed, 94 insertions(+), 36 deletions(-)
 
 diff --git a/src/gui/text/qtextengine.cpp b/src/gui/text/qtextengine.cpp
-index 5e38311fa1..70f76440d3 100644
+index 87dc63d59c..9e90833f2b 100644
 --- a/src/gui/text/qtextengine.cpp
 +++ b/src/gui/text/qtextengine.cpp
-@@ -2045,30 +2045,21 @@ void QTextEngine::itemize() const
+@@ -2057,29 +2057,21 @@ void QTextEngine::itemize() const
              analysis->flags = QScriptAnalysis::Object;
              break;
          case QChar::LineSeparator:
@@ -26,7 +26,7 @@ index 5e38311fa1..70f76440d3 100644
 -                layoutData->string.detach();
 -                string = reinterpret_cast<const ushort *>(layoutData->string.unicode());
 -                uc = string + offset;
--                e = uc + length;
+-                e = string + length;
 -                *const_cast<ushort*>(uc) = 0x21B5; // visual line separator
 -            }
              break;
@@ -42,7 +42,6 @@ index 5e38311fa1..70f76440d3 100644
          case QChar::Nbsp:
 -            if (option.flags() & QTextOption::ShowTabsAndSpaces) {
 -                analysis->flags = QScriptAnalysis::Space;
--                analysis->bidiLevel = bidi.baseLevel;
 -                break;
 -            }
 -            Q_FALLTHROUGH();
