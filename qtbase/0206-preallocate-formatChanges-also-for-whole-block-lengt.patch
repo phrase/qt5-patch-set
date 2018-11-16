@@ -1,0 +1,25 @@
+From acf6652ed6fdf52d89cfd7a04d9bd89267d3c99d Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Fri, 16 Nov 2018 15:11:35 +0100
+Subject: [PATCH] preallocate formatChanges also for whole block length
+
+---
+ src/gui/text/qsyntaxhighlighter.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gui/text/qsyntaxhighlighter.cpp b/src/gui/text/qsyntaxhighlighter.cpp
+index fcda17605f..d778d5d14a 100644
+--- a/src/gui/text/qsyntaxhighlighter.cpp
++++ b/src/gui/text/qsyntaxhighlighter.cpp
+@@ -199,7 +199,7 @@ void QSyntaxHighlighterPrivate::reformatBlock(const QTextBlock &block)
+ 
+     currentBlock = block;
+ 
+-    formatChanges.fill(QTextCharFormat(), block.length() - 1);
++    formatChanges.fill(QTextCharFormat(), block.length());
+     q->highlightBlock(block.text());
+     applyFormatChanges();
+ 
+-- 
+2.18.0.windows.1
+
