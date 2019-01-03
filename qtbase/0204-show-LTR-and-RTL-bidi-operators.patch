@@ -1,0 +1,70 @@
+From 3a6315c04c9380bcaa637a0be543af7ff04dad46 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Thu, 3 Jan 2019 08:53:44 +0100
+Subject: [PATCH] show LTR and RTL bidi operators
+
+---
+ src/gui/text/qtextengine.cpp | 12 ++++++++++++
+ src/gui/text/qtextengine_p.h |  5 +++--
+ src/gui/text/qtextlayout.cpp |  5 +++++
+ 3 files changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/src/gui/text/qtextengine.cpp b/src/gui/text/qtextengine.cpp
+index df7009540e..104af757a9 100644
+--- a/src/gui/text/qtextengine.cpp
++++ b/src/gui/text/qtextengine.cpp
+@@ -2076,6 +2076,18 @@ void QTextEngine::itemize() const
+         case QChar::Nbsp:
+             analysis->flags = QScriptAnalysis::Nbsp;
+             break;
++        case 0x200e:
++        case 0x200f:
++            if (option.flags() & QTextOption::ShowLineAndParagraphSeparators) {
++                analysis->flags = QScriptAnalysis::BidiOperator;
++                const int offset = uc - string;
++                layoutData->string.detach();
++                string = reinterpret_cast<const ushort *>(layoutData->string.unicode());
++                uc = string + offset;
++                e = string + length;
++                *const_cast<ushort*>( uc ) = 0x3000;
++            }
++            break;
+         default:
+             analysis->flags = QScriptAnalysis::None;
+             break;
+diff --git a/src/gui/text/qtextengine_p.h b/src/gui/text/qtextengine_p.h
+index e9187ea605..cee30331d7 100644
+--- a/src/gui/text/qtextengine_p.h
++++ b/src/gui/text/qtextengine_p.h
+@@ -144,9 +144,10 @@ struct Q_AUTOTEST_EXPORT QScriptAnalysis
+         Space = 5,
+         SpaceTabOrObject = Space,
+         Nbsp = 6,
+-        Tab = 7,
++        BidiOperator = 7,
++        Tab = 8,
+         TabOrObject = Tab,
+-        Object = 8
++        Object = 9
+     };
+     enum BidiFlags {
+         BidiBN = 1,
+diff --git a/src/gui/text/qtextlayout.cpp b/src/gui/text/qtextlayout.cpp
+index 5085227723..0f8e27c2a5 100644
+--- a/src/gui/text/qtextlayout.cpp
++++ b/src/gui/text/qtextlayout.cpp
+@@ -2664,6 +2664,11 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+                     p->drawText(pos, visualLine);
+                     p->setPen(pen);
+                 }
++            } else if ((eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators) &&
++                si.analysis.flags == QScriptAnalysis::BidiOperator) {
++                p->setPen(QColor(23, 183, 255));
++                p->drawText(pos, QChar(si.analysis.bidiLevel % 2 ? (ushort)0x21b0 : (ushort)0x21b1));
++                p->setPen(pen);
+             } else {
+                 QPainterPrivate::get(p)->drawTextItem(pos, gf, eng);
+             }
+-- 
+2.18.0.windows.1
+
