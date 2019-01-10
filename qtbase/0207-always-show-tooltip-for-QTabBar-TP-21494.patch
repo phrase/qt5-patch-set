@@ -1,0 +1,38 @@
+From 1d29f5749aed7eaf2fc62cf60e3fc1d30684e43b Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Thu, 10 Jan 2019 15:33:52 +0100
+Subject: [PATCH] always show tooltip for QTabBar TP-21494
+
+---
+ src/widgets/widgets/qmainwindowlayout.cpp | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
+
+diff --git a/src/widgets/widgets/qmainwindowlayout.cpp b/src/widgets/widgets/qmainwindowlayout.cpp
+index 43c22910f9..30d3d5216d 100644
+--- a/src/widgets/widgets/qmainwindowlayout.cpp
++++ b/src/widgets/widgets/qmainwindowlayout.cpp
+@@ -1749,20 +1749,7 @@ void QMainWindowTabBar::mouseReleaseEvent(QMouseEvent *e)
+ 
+ bool QMainWindowTabBar::event(QEvent *e)
+ {
+-    // show the tooltip if tab is too small to fit label
+-
+-    if (e->type() != QEvent::ToolTip)
+-        return QTabBar::event(e);
+-    QSize size = this->size();
+-    QSize hint = sizeHint();
+-    if (shape() == QTabBar::RoundedWest || shape() == QTabBar::RoundedEast) {
+-        size = size.transposed();
+-        hint = hint.transposed();
+-    }
+-    if (size.width() < hint.width())
+-        return QTabBar::event(e);
+-    e->accept();
+-    return true;
++    return QTabBar::event(e);
+ }
+ 
+ QTabBar *QMainWindowLayout::getTabBar()
+-- 
+2.18.0.windows.1
+
