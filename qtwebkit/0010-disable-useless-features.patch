@@ -11,7 +11,7 @@ diff --git a/Tools/qmake/projects/run_cmake.pro b/Tools/qmake/projects/run_cmake
 index 26e4fdd58a6..65526ab4d6d 100644
 --- a/Tools/qmake/projects/run_cmake.pro
 +++ b/Tools/qmake/projects/run_cmake.pro
-@@ -12,6 +12,21 @@ CONFIG(debug, debug|release) {
+@@ -12,6 +12,23 @@ CONFIG(debug, debug|release) {
      configuration = Release
  }
  
@@ -29,6 +29,8 @@ index 26e4fdd58a6..65526ab4d6d 100644
 +CMAKE_CONFIG+=ENABLE_DRAG_SUPPORT=OFF
 +CMAKE_CONFIG+=ENABLE_NETSCAPE_PLUGIN_API=OFF
 +CMAKE_CONFIG+=ENABLE_SAMPLING_PROFILER=OFF
++CMAKE_CONFIG+=ENABLE_XSLT=OFF
++CMAKE_CONFIG+=ENABLE_X11_TARGET=OFF
 +
  programExistsInPath(ninja): use_ninja = 1
  
