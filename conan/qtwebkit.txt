@@ -1,0 +1,17 @@
+[requires]
+icu/59.1@bincrafters/stable
+libxml2/2.9.3@bincrafters/stable
+
+[generators]
+cmake
+txt
+
+[options]
+icu:shared=True
+libxml2:shared=True
+
+[imports]
+bin, icudt59.so -> ./bin
+bin, icuin59.so -> ./bin
+bin, icuuc59.so -> ./bin
+bin, libxml2.so -> ./bin
