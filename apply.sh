@@ -2,7 +2,7 @@
 
 cd "$MEMSOURCE_LIB/qt5"
 
-cp -a --force -v $MEMSOURCE_LIB/qt5-patch-set/* .
+cp -a -f -v $MEMSOURCE_LIB/qt5-patch-set/* .
 
 cd qtbase
 patch -p1 < 0090-disable-printer-in-cocoa.patch
