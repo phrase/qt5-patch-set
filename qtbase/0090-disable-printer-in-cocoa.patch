@@ -9,6 +9,7 @@ Subject: [PATCH] disable printer in cocoa
  src/plugins/platforms/cocoa/qcocoaprintdevice.h      | 2 ++
  src/plugins/platforms/cocoa/qcocoaprintdevice.mm     | 2 ++
  src/plugins/platforms/cocoa/qcocoaprintersupport.h   | 2 ++
+ src/plugins/platforms/cocoa/qpaintengine_mac.mm      | 2 ++
  5 files changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/src/plugins/platforms/cocoa/cocoa.pro b/src/plugins/platforms/cocoa/cocoa.pro
@@ -84,6 +85,20 @@ index 40a638207a..93b2d5d22c 100644
  #ifndef QT_NO_PRINTER
  
  #include "qt_mac_p.h"
+diff --git a/src/plugins/platforms/cocoa/qpaintengine_mac.mm b/src/plugins/platforms/cocoa/qpaintengine_mac.mm
+index 7e241e3..5c1d3f8 100644
+--- a/src/plugins/platforms/cocoa/qpaintengine_mac.mm
++++ b/src/plugins/platforms/cocoa/qpaintengine_mac.mm
+@@ -45,7 +45,9 @@
+ #include <qpainterpath.h>
+ #include <qpixmapcache.h>
+ #include <private/qpaintengine_raster_p.h>
++#if !defined(QT_NO_PRINTER)
+ #include <qprinter.h>
++#endif
+ #include <qstack.h>
+ #include <qtextcodec.h>
+ #include <qwidget.h>
 -- 
 2.18.0.windows.1
 
