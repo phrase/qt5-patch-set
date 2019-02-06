@@ -1,21 +1,21 @@
-From 9c40018d2d5effc1dd83d9a303e3ca501659ea25 Mon Sep 17 00:00:00 2001
-From: "michal.lazo" <michal.lazo@memsource.com>
-Date: Mon, 18 Jun 2018 17:39:27 +0200
+From 05b8f528dfe19b71521cae453d5d0d815de5ff93 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Wed, 6 Feb 2019 12:47:00 +0100
 Subject: [PATCH] disable printer in cocoa
 
 ---
  src/plugins/platforms/cocoa/cocoa.pro                | 2 +-
  src/plugins/platforms/cocoa/qcocoanativeinterface.mm | 2 ++
  src/plugins/platforms/cocoa/qcocoaprintdevice.h      | 2 ++
+ src/plugins/platforms/cocoa/qcocoaprintdevice.mm     | 2 ++
  src/plugins/platforms/cocoa/qcocoaprintersupport.h   | 2 ++
- src/plugins/platforms/cocoa/qpaintengine_mac.mm      | 2 ++
- 5 files changed, 9 insertions(+), 1 deletion(-)
+ 5 files changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/src/plugins/platforms/cocoa/cocoa.pro b/src/plugins/platforms/cocoa/cocoa.pro
-index 5a00e1b..7cb0c24 100644
+index 8d65cf328f..77ca0e3810 100644
 --- a/src/plugins/platforms/cocoa/cocoa.pro
 +++ b/src/plugins/platforms/cocoa/cocoa.pro
-@@ -111,7 +111,7 @@ qtHaveModule(widgets) {
+@@ -122,7 +122,7 @@ qtHaveModule(widgets) {
          HEADERS += qcocoafontdialoghelper.h
      }
  
@@ -25,7 +25,7 @@ index 5a00e1b..7cb0c24 100644
  
  OTHER_FILES += cocoa.json
 diff --git a/src/plugins/platforms/cocoa/qcocoanativeinterface.mm b/src/plugins/platforms/cocoa/qcocoanativeinterface.mm
-index 5504c24..05ae68a 100644
+index 7979e430ac..8d6648fedc 100644
 --- a/src/plugins/platforms/cocoa/qcocoanativeinterface.mm
 +++ b/src/plugins/platforms/cocoa/qcocoanativeinterface.mm
 @@ -62,8 +62,10 @@
@@ -40,7 +40,7 @@ index 5504c24..05ae68a 100644
  #include <QtGui/private/qcoregraphics_p.h>
  
 diff --git a/src/plugins/platforms/cocoa/qcocoaprintdevice.h b/src/plugins/platforms/cocoa/qcocoaprintdevice.h
-index c726cca..6f65b68 100644
+index d267343b0e..375f690e5e 100644
 --- a/src/plugins/platforms/cocoa/qcocoaprintdevice.h
 +++ b/src/plugins/platforms/cocoa/qcocoaprintdevice.h
 @@ -51,7 +51,9 @@
@@ -53,8 +53,25 @@ index c726cca..6f65b68 100644
  
  #ifndef QT_NO_PRINTER
  
+diff --git a/src/plugins/platforms/cocoa/qcocoaprintdevice.mm b/src/plugins/platforms/cocoa/qcocoaprintdevice.mm
+index 7605dc9d1a..c2500bf2ca 100644
+--- a/src/plugins/platforms/cocoa/qcocoaprintdevice.mm
++++ b/src/plugins/platforms/cocoa/qcocoaprintdevice.mm
+@@ -39,10 +39,12 @@
+ 
+ #include "qcocoaprintdevice.h"
+ 
++#ifndef QT_NO_PRINTER
+ #if QT_CONFIG(mimetype)
+ #include <QtCore/qmimedatabase.h>
+ #endif
+ #include <qdebug.h>
++#endif
+ 
+ QT_BEGIN_NAMESPACE
+ 
 diff --git a/src/plugins/platforms/cocoa/qcocoaprintersupport.h b/src/plugins/platforms/cocoa/qcocoaprintersupport.h
-index a07bf0e..b22b24d 100644
+index 40a638207a..93b2d5d22c 100644
 --- a/src/plugins/platforms/cocoa/qcocoaprintersupport.h
 +++ b/src/plugins/platforms/cocoa/qcocoaprintersupport.h
 @@ -40,7 +40,9 @@
@@ -67,20 +84,6 @@ index a07bf0e..b22b24d 100644
  #ifndef QT_NO_PRINTER
  
  #include "qt_mac_p.h"
-diff --git a/src/plugins/platforms/cocoa/qpaintengine_mac.mm b/src/plugins/platforms/cocoa/qpaintengine_mac.mm
-index 7e241e3..5c1d3f8 100644
---- a/src/plugins/platforms/cocoa/qpaintengine_mac.mm
-+++ b/src/plugins/platforms/cocoa/qpaintengine_mac.mm
-@@ -45,7 +45,9 @@
- #include <qpainterpath.h>
- #include <qpixmapcache.h>
- #include <private/qpaintengine_raster_p.h>
-+#if !defined(QT_NO_PRINTER)
- #include <qprinter.h>
-+#endif
- #include <qstack.h>
- #include <qtextcodec.h>
- #include <qwidget.h>
 -- 
-2.9.2.windows.1
+2.18.0.windows.1
 
