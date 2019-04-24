@@ -12,7 +12,6 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0100-default-debug-compilation-flags-for-msvc-Od-Ob0.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0101-10289-support-CJK-overwrite.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0102-disable-generating-documentContentChanged-with-rehig.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0103-enable-construct-QSyntaxHighlighter-without-parent.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0104-fix-xToCursor-to-better-handle-RTL.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0105-more-wordSeparators.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0106-fix-for-QTBUG-69288.patch
