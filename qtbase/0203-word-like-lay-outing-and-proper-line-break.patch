@@ -1,16 +1,16 @@
-From b889274cd6f2a19cc882a7838f21353a79890250 Mon Sep 17 00:00:00 2001
+From 92bce9910df173b9aeda980dad677c237aa62071 Mon Sep 17 00:00:00 2001
 From: Michal Lazo <michal.lazo@memsource.com>
-Date: Tue, 12 Mar 2019 11:05:35 +0100
+Date: Wed, 24 Apr 2019 15:46:38 +0200
 Subject: [PATCH] word like lay-outing and proper line-break
 
 ---
- src/gui/text/qtextengine.cpp | 18 +++-----
- src/gui/text/qtextlayout.cpp | 80 +++++++++++++++++++++++++++++++-----
+ src/gui/text/qtextengine.cpp | 18 +++------
+ src/gui/text/qtextlayout.cpp | 75 ++++++++++++++++++++++++++++++------
  src/gui/text/qtextoption.h   |  1 +
- 3 files changed, 75 insertions(+), 24 deletions(-)
+ 3 files changed, 70 insertions(+), 24 deletions(-)
 
 diff --git a/src/gui/text/qtextengine.cpp b/src/gui/text/qtextengine.cpp
-index a83ef95c79..55ba382eb7 100644
+index 9e5f815af4..0f28099215 100644
 --- a/src/gui/text/qtextengine.cpp
 +++ b/src/gui/text/qtextengine.cpp
 @@ -2088,26 +2088,18 @@ void QTextEngine::itemize() const
@@ -46,7 +46,7 @@ index a83ef95c79..55ba382eb7 100644
              analysis->flags = QScriptAnalysis::None;
              break;
 diff --git a/src/gui/text/qtextlayout.cpp b/src/gui/text/qtextlayout.cpp
-index f3f0caa379..aa663a9dff 100644
+index f947a62ab5..8ee4f82e19 100644
 --- a/src/gui/text/qtextlayout.cpp
 +++ b/src/gui/text/qtextlayout.cpp
 @@ -1707,7 +1707,7 @@ namespace {
@@ -177,7 +177,7 @@ index f3f0caa379..aa663a9dff 100644
          if (selection
              && selection->start <= line.from
              && selection->start + selection->length > line.from) {
-@@ -2662,7 +2698,29 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+@@ -2662,7 +2698,24 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
          } else {
              if (noText)
                  gf.glyphs.numGlyphs = 0; // slightly less elegant than it should be
@@ -188,12 +188,7 @@ index f3f0caa379..aa663a9dff 100644
 +                if ((index == eng->lines.size() - 1) && (eng->block.next().isValid() != false)) {
 +                    visualLine = (ushort)0xB6;
 +                } else if (iterator.itemStart < (eng->layoutData->string.length() - 1)) {
-+                    if (rtl) {
-+                        visualLine = ((ushort)0x21aa);
-+                        pos = QPointF((line.width - line.textWidth).toReal(), y.toReal());
-+                    } else {
-+                        visualLine = ((ushort)0x21a9);
-+                    }
++                    visualLine = ((ushort)0x21a9);
 +                }
 +                if (visualLine.unicode()) {
 +                    QBrush c = format.foreground();
