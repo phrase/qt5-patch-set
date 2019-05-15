@@ -18,7 +18,7 @@ index 9e5f815af4..5f764bbe9e 100644
                  uc = string + offset;
                  e = string + length;
 -                *const_cast<ushort*>(uc) = 0x21B5; // visual line separator
-+                *const_cast<ushort*>(uc) = 0x21a5; // visual line separator
++                *const_cast<ushort*>(uc) = 0x21a9;
              }
              break;
          case QChar::Tabulation:
