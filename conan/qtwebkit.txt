@@ -1,5 +1,5 @@
 [requires]
-icu/59.1@bincrafters/stable
+icu/60.2@bincrafters/stable
 libxml2/2.9.3@bincrafters/stable
 
 [generators]
@@ -8,6 +8,7 @@ txt
 
 [options]
 icu:shared=True
+icu:data_packaging=library
 libxml2:shared=True
 
 [imports]
