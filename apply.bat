@@ -46,8 +46,6 @@ cd ..
 
 cd qtwebkit 
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-build-without-qt-pdf-support.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-support-qt-5.12-libjpeg.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0003-compile-with-qt5.12-libjpeg.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0010-disable-useless-features.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < fixes-for-gcc-v7.3.0.patch
 cd ..

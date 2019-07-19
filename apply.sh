@@ -31,8 +31,6 @@ cd ..
 
 cd qtwebkit
 patch -p1 < 0001-build-without-qt-pdf-support.patch
-patch -p1 < 0002-support-qt-5.12-libjpeg.patch
-patch -p1 < 0003-compile-with-qt5.12-libjpeg.patch
 patch -p1 < 0010-disable-useless-features.patch
 patch -p1 < fixes-for-gcc-v7.3.0.patch
 cd ..
