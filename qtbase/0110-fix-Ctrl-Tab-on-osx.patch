@@ -1,0 +1,51 @@
+From 985182253e81d54938e2fc067b6c620772502114 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Fri, 19 Jul 2019 12:29:04 +0200
+Subject: [PATCH 1/1] fix Ctrl+Tab on osx
+
+Change-Id: Icaeabb43fcaddcdfee37185d8aa2154bd950b697
+---
+ src/plugins/platforms/cocoa/qnsview_keys.mm | 27 +++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/src/plugins/platforms/cocoa/qnsview_keys.mm b/src/plugins/platforms/cocoa/qnsview_keys.mm
+index ad751279bb..46c8cdd03f 100644
+--- a/src/plugins/platforms/cocoa/qnsview_keys.mm
++++ b/src/plugins/platforms/cocoa/qnsview_keys.mm
+@@ -159,6 +159,33 @@ - (bool)handleKeyEvent:(NSEvent *)nsevent eventType:(int)eventType
+     return accepted;
+ }
+ 
++- (BOOL)performKeyEquivalent:(NSEvent *)nsevent
++{
++    // At the moment the only reason we define this method
++    // is Ctrl-tab key event never reaching any view at all.
++    // After -performKeyEquivalent: returns NO on all responders,
++    // we receve Ctrl-tab in our QNSWindow's -sendEvent:,
++    // but somehow it never reaches QNSView's -keyDown:.
++    // Apparently, it's treated in a special (and undocumented)
++    // way by Cocoa. 'Illegal' but really nice, clear and safe solution
++    // would be to define _wantsKeyDownForEvent, but it's a
++    // private/undocumented API.
++
++    if ([[self window] firstResponder] == self) {
++        const NSUInteger modifierFlags = [nsevent modifierFlags];
++        NSString *chs = [nsevent charactersIgnoringModifiers];
++        if (modifierFlags & NSControlKeyMask) {
++            if ([chs characterAtIndex:0] == NSTabCharacter) {
++                if (![[NSApp mainMenu] performKeyEquivalent:nsevent])
++                    [self keyDown:nsevent];
++                return YES;
++            }
++        }
++    }
++
++    return NO;
++}
++
+ - (void)keyDown:(NSEvent *)nsevent
+ {
+     if ([self isTransparentForUserInput])
+-- 
+2.20.1 (Apple Git-117)
+
