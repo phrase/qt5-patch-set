@@ -47,8 +47,11 @@ cd ..
 
 cd qtwebkit 
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-build-without-qt-pdf-support.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0010-disable-useless-features.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < fixes-for-gcc-v7.3.0.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-fix-build-without-webkit2.patch
+REM "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0010-disable-useless-features.patch
+REM "C:\Program Files\Git\usr\bin\patch.exe" -p1 < fixes-for-gcc-v7.3.0.patch
+REM "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-fix-build-without-webkit2.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-fix-string-replace-for-conan.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-disable-WOFF2.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-remove-WEBKIT_SET_EXTRA_COMPILER_FLAGS.patch
 cd ..
 

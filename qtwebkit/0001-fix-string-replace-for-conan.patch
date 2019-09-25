@@ -1,0 +1,25 @@
+From c751c19550cf729a5e466a53915ddbfd4e6ad951 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Wed, 25 Sep 2019 01:00:39 -0700
+Subject: [PATCH 1/1] fix string replace for conan
+
+---
+ Source/cmake/OptionsQt.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Source/cmake/OptionsQt.cmake b/Source/cmake/OptionsQt.cmake
+index 2814431aa0..2a203cdea8 100644
+--- a/Source/cmake/OptionsQt.cmake
++++ b/Source/cmake/OptionsQt.cmake
+@@ -20,7 +20,7 @@ if (QT_CONAN_DIR)
+     include("${QT_CONAN_DIR}/conanbuildinfo.cmake")
+ 
+     # Remove this workaround when libxslt package is fixed
+-    string(REPLACE "include/libxslt" "include" replace_CONAN_INCLUDE_DIRS ${CONAN_INCLUDE_DIRS})
++    string(REPLACE "include/libxslt" "include" replace_CONAN_INCLUDE_DIRS "${CONAN_INCLUDE_DIRS}")
+     set(CONAN_INCLUDE_DIRS ${replace_CONAN_INCLUDE_DIRS})
+ 
+     # Remove this workaround when libxml2 package is fixed
+-- 
+2.17.1
+

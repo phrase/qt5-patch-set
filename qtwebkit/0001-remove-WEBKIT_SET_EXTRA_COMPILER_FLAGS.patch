@@ -1,0 +1,24 @@
+From d7b9874083cfea6fdaa1b631da7cf86942abccb2 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Wed, 25 Sep 2019 01:12:39 -0700
+Subject: [PATCH 1/1] remove WEBKIT_SET_EXTRA_COMPILER_FLAGS
+
+---
+ Source/cmake/OptionsQt.cmake | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Source/cmake/OptionsQt.cmake b/Source/cmake/OptionsQt.cmake
+index ab84b85cc5..de89238fec 100644
+--- a/Source/cmake/OptionsQt.cmake
++++ b/Source/cmake/OptionsQt.cmake
+@@ -423,7 +423,6 @@ if (SQLITE3_SOURCE_DIR)
+     endif ()
+     add_library(qtsqlite STATIC ${SQLITE_SOURCE_FILE})
+     target_compile_definitions(qtsqlite PUBLIC -DSQLITE_CORE -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_OMIT_COMPLETE)
+-    WEBKIT_SET_EXTRA_COMPILER_FLAGS(qtsqlite)
+     QT_ADD_EXTRA_WEBKIT_TARGET_EXPORT(qtsqlite)
+     set(SQLITE_LIBRARIES qtsqlite)
+     set(SQLITE_FOUND 1)
+-- 
+2.17.1
+
