@@ -18,7 +18,6 @@ patch -p1 < 0106-fix-for-QTBUG-69288.patch
 
 patch -p1 < 0109-missing-trailingSpaces-in-QTextLineItemIterator.patch
 patch -p1 < 0110-fix-Ctrl-Tab-on-osx.patch
-patch -p1 < 0111-QTBUG-76588.patch
 
 patch -p1 < 0200-draw-text-misspelling-our-way.patch
 patch -p1 < 0201-filter-more-date-for-completer-properly-handle-parti.patch
