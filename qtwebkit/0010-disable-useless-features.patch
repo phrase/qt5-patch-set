@@ -4,17 +4,18 @@ Date: Fri, 18 Jan 2019 10:03:07 +0100
 Subject: [PATCH] disable useless features
 
 ---
- Tools/qmake/projects/run_cmake.pro | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ Tools/qmake/projects/run_cmake.pro | 16 +++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/Tools/qmake/projects/run_cmake.pro b/Tools/qmake/projects/run_cmake.pro
 index 26e4fdd58a6..65526ab4d6d 100644
 --- a/Tools/qmake/projects/run_cmake.pro
 +++ b/Tools/qmake/projects/run_cmake.pro
-@@ -12,6 +12,23 @@ CONFIG(debug, debug|release) {
+@@ -12,6 +12,24 @@ CONFIG(debug, debug|release) {
      configuration = Release
  }
  
++CMAKE_CONFIG+=USE_LIBJPEG=OFF
 +CMAKE_CONFIG+=ENABLE_PRINT_SUPPORT=OFF
 +CMAKE_CONFIG+=ENABLE_GEOLOCATION=OFF
 +CMAKE_CONFIG+=ENABLE_DEVICE_ORIENTATION=OFF
