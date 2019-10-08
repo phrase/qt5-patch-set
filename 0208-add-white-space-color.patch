@@ -1,0 +1,70 @@
+diff --git a/src/gui/text/qtextformat.h b/src/gui/text/qtextformat.h
+index d14f2f3c5c..2e495cdd83 100644
+--- a/src/gui/text/qtextformat.h
++++ b/src/gui/text/qtextformat.h
+@@ -207,6 +207,7 @@ public:
+         TextUnderlineStyle = 0x2023,
+         TextToolTip = 0x2024,
+         TextMisspelling = 0x2025,
++        TextWhiteSpaceColor = 0x2026,
+ 
+         IsAnchor = 0x2030,
+         AnchorHref = 0x2031,
+diff --git a/src/gui/text/qtextlayout.cpp b/src/gui/text/qtextlayout.cpp
+index 5b4a7d0323..4eb8eb5fcd 100644
+--- a/src/gui/text/qtextlayout.cpp
++++ b/src/gui/text/qtextlayout.cpp
+@@ -2635,8 +2635,12 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+                         else
+                              x /= 2; // Centered
+                         p->setFont(f);
++                        QColor wsColor = format.colorProperty(QTextFormat::TextWhiteSpaceColor);
++                        if (wsColor.isValid())
++                            p->setPen(wsColor);
+                         p->drawText(QPointF(iterator.x.toReal() + x,
+                                             y.toReal()), visualTab);
++                        p->setPen(pen);
+                     }
+ 
+                 }
+@@ -2712,14 +2716,20 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+                 }
+                 if (visualLine.unicode()) {
+                     QBrush c = format.foreground();
+-                    if(c.style() != Qt::NoBrush)
++                    QColor wsColor = format.colorProperty(QTextFormat::TextWhiteSpaceColor);
++                    if (wsColor.isValid()) {
++                        p->setPen(wsColor);
++                    } else if (c.style() != Qt::NoBrush) {
+                         p->setPen(c.color());
++                    }
+                     p->drawText(pos, visualLine);
+                     p->setPen(pen);
+                 }
+             } else if ((eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators) &&
+                 si.analysis.flags == QScriptAnalysis::BidiOperator) {
+-                p->setPen(QColor(23, 183, 255));
++                QColor wsColor = format.colorProperty(QTextFormat::TextWhiteSpaceColor);
++                if (wsColor.isValid())
++                    p->setPen(wsColor);
+                 p->drawText(pos, QChar(si.analysis.bidiLevel % 2 ? (ushort)0x21b0 : (ushort)0x21b1));
+                 p->setPen(pen);
+             } else {
+@@ -2731,11 +2741,15 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+              || si.analysis.flags == QScriptAnalysis::Nbsp)
+             && (eng->option.flags() & QTextOption::ShowTabsAndSpaces)) {
+             QBrush c = format.foreground();
+-            if (c.style() != Qt::NoBrush)
+-                p->setPen(c.color());
+             QChar visualSpace(si.analysis.flags == QScriptAnalysis::Space ? (ushort)0xb7 : (ushort)0xb0);
+             QFont oldFont = p->font();
+             p->setFont(eng->font(si));
++            QColor wsColor = format.colorProperty(QTextFormat::TextWhiteSpaceColor);
++            if (wsColor.isValid()) {
++                p->setPen(wsColor);
++            } else if (c.style() != Qt::NoBrush) {
++                p->setPen(c.color());
++            }
+             p->drawText(QPointF(iterator.x.toReal(), itemBaseLine.toReal()), visualSpace);
+             p->setPen(pen);
+             p->setFont(oldFont);
