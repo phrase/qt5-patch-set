@@ -29,10 +29,3 @@ patch -p1 < 0206-preallocate-formatChanges-also-for-whole-block-lengt.patch
 patch -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 patch -p1 < 0208-add-white-space-color.patch
 cd ..
-
-cd qtwebkit
-patch -p1 < 0001-build-without-qt-pdf-support.patch
-patch -p1 < 0010-disable-useless-features.patch
-patch -p1 < fixes-for-gcc-v7.3.0.patch
-patch -p1 < 0001-fix-build-without-webkit2.patch
-cd ..
