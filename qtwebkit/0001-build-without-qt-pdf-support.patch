@@ -1,0 +1,27 @@
+From 4991da32c494bbb925a0bf13eb233edd6e925de8 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Fri, 18 Jan 2019 09:54:57 +0100
+Subject: [PATCH] build without qt pdf support
+
+---
+ Source/WebCore/platform/graphics/qt/GraphicsContextQt.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Source/WebCore/platform/graphics/qt/GraphicsContextQt.cpp b/Source/WebCore/platform/graphics/qt/GraphicsContextQt.cpp
+index 1e041050e5a..1ec49833db2 100644
+--- a/Source/WebCore/platform/graphics/qt/GraphicsContextQt.cpp
++++ b/Source/WebCore/platform/graphics/qt/GraphicsContextQt.cpp
+@@ -1600,8 +1600,10 @@ void GraphicsContext::setURLForRect(const URL& url, const IntRect& rect)
+         return;
+ 
+     QPainter* p = m_data->p();
++#ifndef QT_NO_PDF
+     if (p->paintEngine()->type() == QPaintEngine::Pdf)
+         static_cast<QPdfEngine *>(p->paintEngine())->drawHyperlink(p->worldTransform().mapRect(rect), url);
++#endif
+ #else
+     UNUSED_PARAM(url);
+     UNUSED_PARAM(rect);
+-- 
+2.18.0.windows.1
+

@@ -1,0 +1,85 @@
+diff --git a/Source/JavaScriptCore/inspector/InspectorBackendDispatcher.h b/Source/JavaScriptCore/inspector/InspectorBackendDispatcher.h
+index d86ad3eea..2ebfe384d 100644
+--- a/Source/JavaScriptCore/inspector/InspectorBackendDispatcher.h
++++ b/Source/JavaScriptCore/inspector/InspectorBackendDispatcher.h
+@@ -32,6 +32,7 @@
+ #include <wtf/Optional.h>
+ #include <wtf/RefCounted.h>
+ #include <wtf/text/WTFString.h>
++#include <functional>
+ 
+ namespace Inspector {
+ 
+diff --git a/Source/JavaScriptCore/runtime/JSArrayBufferView.h b/Source/JavaScriptCore/runtime/JSArrayBufferView.h
+index 769150b36..a5afdb9ef 100644
+--- a/Source/JavaScriptCore/runtime/JSArrayBufferView.h
++++ b/Source/JavaScriptCore/runtime/JSArrayBufferView.h
+@@ -162,7 +162,7 @@ public:
+     bool isNeutered() { return hasArrayBuffer() && !vector(); }
+     void neuter();
+     
+-    void* vector()
++    void* vector() const
+     {
+         return m_vector.getPredicated(
+             this,
+diff --git a/Source/WebCore/css/CSSValue.h b/Source/WebCore/css/CSSValue.h
+index 59dc61744..4b7edc785 100644
+--- a/Source/WebCore/css/CSSValue.h
++++ b/Source/WebCore/css/CSSValue.h
+@@ -27,6 +27,7 @@
+ #include <wtf/RefCounted.h>
+ #include <wtf/RefPtr.h>
+ #include <wtf/TypeCasts.h>
++#include <functional>
+ 
+ namespace WebCore {
+ 
+diff --git a/Source/WebCore/css/StyleSheetContents.h b/Source/WebCore/css/StyleSheetContents.h
+index f25662172..376e47951 100644
+--- a/Source/WebCore/css/StyleSheetContents.h
++++ b/Source/WebCore/css/StyleSheetContents.h
+@@ -30,6 +30,7 @@
+ #include <wtf/Vector.h>
+ #include <wtf/text/AtomicStringHash.h>
+ #include <wtf/text/TextPosition.h>
++#include <functional>
+ 
+ namespace WebCore {
+ 
+diff --git a/Source/WebCore/loader/NetscapePlugInStreamLoader.h b/Source/WebCore/loader/NetscapePlugInStreamLoader.h
+index 9926c3312..0abadacc5 100644
+--- a/Source/WebCore/loader/NetscapePlugInStreamLoader.h
++++ b/Source/WebCore/loader/NetscapePlugInStreamLoader.h
+@@ -31,6 +31,7 @@
+ 
+ #include "ResourceLoader.h"
+ #include <wtf/Forward.h>
++#include <functional>
+ 
+ namespace WebCore {
+ 
+diff --git a/Source/WebCore/loader/ResourceLoader.h b/Source/WebCore/loader/ResourceLoader.h
+index 189b3bc8a..649ddbc02 100644
+--- a/Source/WebCore/loader/ResourceLoader.h
++++ b/Source/WebCore/loader/ResourceLoader.h
+@@ -35,6 +35,7 @@
+ #include "ResourceRequest.h"
+ #include "ResourceResponse.h"
+ #include <wtf/Forward.h>
++#include <functional>
+ 
+ namespace WTF {
+ class SchedulePair;
+diff --git a/Tools/TestWebKitAPI/Tests/WTF/HashSet.cpp b/Tools/TestWebKitAPI/Tests/WTF/HashSet.cpp
+index 1d6ffc039..cdd46ccd8 100644
+--- a/Tools/TestWebKitAPI/Tests/WTF/HashSet.cpp
++++ b/Tools/TestWebKitAPI/Tests/WTF/HashSet.cpp
+@@ -29,6 +29,7 @@
+ #include "MoveOnly.h"
+ #include <wtf/HashSet.h>
+ #include <wtf/RefPtr.h>
++#include <functional>
+ 
+ namespace TestWebKitAPI {
+ 
