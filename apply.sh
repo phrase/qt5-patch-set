@@ -29,3 +29,7 @@ patch -p1 < 0206-preallocate-formatChanges-also-for-whole-block-lengt.patch
 patch -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 patch -p1 < 0208-add-white-space-color.patch
 cd ..
+
+cd qtwebengine
+patch -p1 < 0001-enable-ninjaflags-as-env-variable.patch
+cd ..
