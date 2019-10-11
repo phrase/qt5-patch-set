@@ -1,6 +1,8 @@
 cd %MEMSOURCE_LIB%\qt5
 
-xcopy ..\qt5-patch-set\* . /Y/S
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase . /S
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtdeclarative . /S
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols . /S
 
 cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0090-disable-printer-in-cocoa.patch
@@ -28,12 +30,12 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0208-add-white-space-color.patch
 
 
-#"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1001-examples-ifdefs.patch
-#"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1002-tests-ifdef-and-qtConfig.patch
-#"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1003-disable-tst_QFont-italicOblique.patch
-#"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1004-disable-don-t-working-tests.patch
-#"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1005-disable-example-notepad.patch
-#"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1010-QTextLayout-tests-fix.patch
+rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1001-examples-ifdefs.patch
+rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1002-tests-ifdef-and-qtConfig.patch
+rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1003-disable-tst_QFont-italicOblique.patch
+rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1004-disable-don-t-working-tests.patch
+rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1005-disable-example-notepad.patch
+rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1010-QTextLayout-tests-fix.patch
 cd ..
 
 cd qtdeclarative
