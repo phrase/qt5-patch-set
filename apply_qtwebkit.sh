@@ -1,6 +1,8 @@
 #!/bin/sh
 
-cd "$MEMSOURCE_LIB/qt5"
+cd ${MEMSOURCE_LIB}/qt5
+
+cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtwebkit .
 
 cd qtwebkit
 patch -p1 < 0001-build-without-qt-pdf-support.patch

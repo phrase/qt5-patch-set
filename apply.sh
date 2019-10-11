@@ -1,8 +1,9 @@
 #!/bin/sh
 
-cd "$MEMSOURCE_LIB/qt5"
+cd ${MEMSOURCE_LIB}/qt5
 
-cp -a -f -v $MEMSOURCE_LIB/qt5-patch-set/* .
+cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtbase .
+cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtwebengine .
 
 cd qtbase
 patch -p1 < 0090-disable-printer-in-cocoa.patch
