@@ -10,9 +10,3 @@ txt
 icu:shared=True
 icu:data_packaging=library
 libxml2:shared=True
-
-[imports]
-bin, icudt59.so -> ./bin
-bin, icuin59.so -> ./bin
-bin, icuuc59.so -> ./bin
-bin, libxml2.so -> ./bin
