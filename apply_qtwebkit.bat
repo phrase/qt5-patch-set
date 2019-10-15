@@ -1,6 +1,6 @@
 cd %MEMSOURCE_LIB%\qt5
 
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtwebkit . /S
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtwebkit qtwebkit /S
 
 cd qtwebkit
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-build-without-qt-pdf-support.patch

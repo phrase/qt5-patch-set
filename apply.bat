@@ -1,8 +1,8 @@
 cd %MEMSOURCE_LIB%\qt5
 
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase . /S
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtdeclarative . /S
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols . /S
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase qtbase /S
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtdeclarative qtdeclarative /S
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols qtquickcontrols /S
 
 cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0090-disable-printer-in-cocoa.patch
