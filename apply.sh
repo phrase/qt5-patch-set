@@ -6,9 +6,6 @@ cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtbase .
 cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtwebengine .
 
 cd qtbase
-patch -p1 < 0090-disable-printer-in-cocoa.patch
-patch -p1 < 0091-disable-printsupport-qtbase.patch
-patch -p1 < 0092-disable-print-support.patch
 
 patch -p1 < 0100-default-debug-compilation-flags-for-msvc-Od-Ob0.patch
 patch -p1 < 0101-10289-support-CJK-overwrite.patch

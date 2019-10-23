@@ -5,10 +5,6 @@ xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtdeclarative qtdeclarative /S
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols qtquickcontrols /S
 
 cd qtbase
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0090-disable-printer-in-cocoa.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0091-disable-printsupport-qtbase.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0092-disable-print-support.patch
-
 
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0100-default-debug-compilation-flags-for-msvc-Od-Ob0.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0101-10289-support-CJK-overwrite.patch
