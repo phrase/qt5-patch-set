@@ -1,0 +1,28 @@
+From 82e4f0d154099fe4e99035f6fb693b77f1bf95e6 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Fri, 6 Dec 2019 10:12:10 +0100
+Subject: [PATCH] ignore font 8514oem QTBUG-69634
+
+Change-Id: I19919aeed8e8d833f67ee057daeb732854c991db
+---
+ .../fontdatabases/windows/qwindowsfontdatabase.cpp            | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/platformsupport/fontdatabases/windows/qwindowsfontdatabase.cpp b/src/platformsupport/fontdatabases/windows/qwindowsfontdatabase.cpp
+index c456f01b28..629ff2262a 100644
+--- a/src/platformsupport/fontdatabases/windows/qwindowsfontdatabase.cpp
++++ b/src/platformsupport/fontdatabases/windows/qwindowsfontdatabase.cpp
+@@ -1170,6 +1170,10 @@ static int QT_WIN_CALLBACK populateFontFamilies(const LOGFONT *logFont, const TE
+     const wchar_t *faceNameW = f->elfLogFont.lfFaceName;
+     if (faceNameW[0] && faceNameW[0] != L'@' && wcsncmp(faceNameW, L"WST_", 4)) {
+         const QString faceName = QString::fromWCharArray(faceNameW);
++        // don't add bad font
++        if (faceName == QStringLiteral("8514oem")) {
++            return 1;
++        }
+         QPlatformFontDatabase::registerFontFamily(faceName);
+         // Register current font's english name as alias
+         const bool ttf = (textmetric->tmPitchAndFamily & TMPF_TRUETYPE);
+-- 
+2.23.0.windows.1
+
