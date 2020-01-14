@@ -22,7 +22,6 @@ patch -p1 < 0201-filter-more-date-for-completer-properly-handle-parti.patch
 patch -p1 < 0202-QSyntaxHighlighter-merge-char-formats.patch
 patch -p1 < 0203-word-like-lay-outing-and-proper-line-break.patch
 patch -p1 < 0204-show-LTR-and-RTL-bidi-operators.patch
-patch -p1 < 0205-move-QTextCursor-to-Start-when-there-isn-t-any-previ.patch
 patch -p1 < 0206-preallocate-formatChanges-also-for-whole-block-lengt.patch
 patch -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 patch -p1 < 0208-add-white-space-color.patch
