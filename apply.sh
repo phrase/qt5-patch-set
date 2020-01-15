@@ -29,4 +29,5 @@ cd ..
 
 cd qtwebengine
 patch -p1 < 0001-enable-ninjaflags-as-env-variable.patch
+patch -p1 < 0002-disable-useless-check.patch
 cd ..

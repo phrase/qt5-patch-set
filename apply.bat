@@ -41,3 +41,7 @@ cd ..
 cd qtquickcontrols
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-9859-TabViewStyle-changes.patch
 cd ..
+
+cd qtwebengine
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-disable-useless-check.patch
+cd ..
