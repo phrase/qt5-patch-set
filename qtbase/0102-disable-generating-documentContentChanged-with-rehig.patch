@@ -1,28 +1,16 @@
-From 4e85f15615cc004b93ddd9819efde2064db4c364 Mon Sep 17 00:00:00 2001
-From: "michal.lazo" <michal.lazo@memsource.com>
-Date: Tue, 10 Apr 2018 10:24:24 +0200
-Subject: [PATCH] disable generating documentContentChanged with rehighlight
-
----
- src/gui/text/qsyntaxhighlighter.cpp | 2 --
- 1 file changed, 2 deletions(-)
-
 diff --git a/src/gui/text/qsyntaxhighlighter.cpp b/src/gui/text/qsyntaxhighlighter.cpp
-index fcda176..51cb010 100644
+index cf584f6980..3207fadebd 100644
 --- a/src/gui/text/qsyntaxhighlighter.cpp
 +++ b/src/gui/text/qsyntaxhighlighter.cpp
-@@ -70,11 +70,9 @@ public:
- 
-     inline void rehighlight(QTextCursor &cursor, QTextCursor::MoveOperation operation) {
-         inReformatBlocks = true;
+@@ -72,11 +72,9 @@ public:
+     inline void rehighlight(QTextCursor &cursor, QTextCursor::MoveOperation operation)
+     {
+         QScopedValueRollback<bool> bg(inReformatBlocks, true);
 -        cursor.beginEditBlock();
          int from = cursor.position();
          cursor.movePosition(operation);
          reformatBlocks(from, 0, cursor.position() - from);
 -        cursor.endEditBlock();
-         inReformatBlocks = false;
      }
  
--- 
-2.9.2.windows.1
-
+     inline void _q_delayedRehighlight() {
