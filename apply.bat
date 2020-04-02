@@ -3,6 +3,7 @@ cd %MEMSOURCE_LIB%\qt5
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase qtbase /S
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtdeclarative qtdeclarative /S
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols qtquickcontrols /S
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtwebengine qtwebengine /S
 
 cd qtbase
 
@@ -14,6 +15,7 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0106-fix-for-QTBUG-69288.patch
 
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0109-missing-trailingSpaces-in-QTextLineItemIterator.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0110-fix-Ctrl-Tab-on-osx.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0111-ignore-font-8514oem-QTBUG-69634.patch
 
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0200-draw-text-misspelling-our-way.patch
