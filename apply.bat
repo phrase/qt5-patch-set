@@ -24,7 +24,6 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0206-preallocate-formatChanges-also-for-whole-block-lengt.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0208-add-white-space-color.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0209-QCalendarWidget-make-disabled-dates-more-visible.patch
 
 rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1001-examples-ifdefs.patch
 rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1002-tests-ifdef-and-qtConfig.patch
