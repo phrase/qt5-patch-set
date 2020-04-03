@@ -1,5 +1,5 @@
 [requires]
-icu/60.2@bincrafters/stable
+icu/64.2@bincrafters/stable
 libxml2/2.9.3@bincrafters/stable
 
 [generators]
