@@ -6,7 +6,6 @@ xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols qtquickcontrols /S
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtwebengine qtwebengine /S
 
 cd qtbase
-
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0100-default-debug-compilation-flags-for-msvc-Od-Ob0.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0101-10289-support-CJK-overwrite.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0102-disable-generating-documentContentChanged-with-rehig.patch
@@ -26,13 +25,6 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0206-preallocate-formatChanges-also-for-whole-block-lengt.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0208-add-white-space-color.patch
-
-rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1001-examples-ifdefs.patch
-rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1002-tests-ifdef-and-qtConfig.patch
-rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1003-disable-tst_QFont-italicOblique.patch
-rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1004-disable-don-t-working-tests.patch
-rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1005-disable-example-notepad.patch
-rem "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1010-QTextLayout-tests-fix.patch
 cd ..
 
 cd qtdeclarative
