@@ -38,4 +38,5 @@ cd ..
 cd qtwebengine
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-enable-ninjaflags-as-env-variable.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-disable-useless-check.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0003-missing-include.patch
 cd ..
