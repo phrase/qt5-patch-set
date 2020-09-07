@@ -12,6 +12,7 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0104-fix-xToCursor-to-better-handle-RTL.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0105-more-wordSeparators.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0106-fix-for-QTBUG-69288.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0107-fix-for-QTBUG-85902.patch
 
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0109-missing-trailingSpaces-in-QTextLineItemIterator.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0110-fix-Ctrl-Tab-on-osx.patch
