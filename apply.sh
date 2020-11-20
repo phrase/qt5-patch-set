@@ -12,7 +12,6 @@ patch -p1 < 0102-disable-generating-documentContentChanged-with-rehig.patch
 patch -p1 < 0104-fix-xToCursor-to-better-handle-RTL.patch
 patch -p1 < 0105-more-wordSeparators.patch
 patch -p1 < 0106-fix-for-QTBUG-69288.patch
-patch -p1 < 0107-fix-for-QTBUG-85902.patch
 
 patch -p1 < 0109-missing-trailingSpaces-in-QTextLineItemIterator.patch
 patch -p1 < 0110-fix-Ctrl-Tab-on-osx.patch
