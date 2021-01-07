@@ -1,0 +1,53 @@
+From d78b7084ec10f12bbfcecd92fd84a5dafaab5c7e Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Thu, 7 Jan 2021 13:12:36 +0100
+Subject: [PATCH] process carriage return and new line as just one line and
+ don't normalize to new line
+
+Change-Id: Ib25ffebe3d3bd087e8587a3a0ccc69eead48a600
+---
+ src/corelib/serialization/qxmlstream.cpp | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/src/corelib/serialization/qxmlstream.cpp b/src/corelib/serialization/qxmlstream.cpp
+index 4f282f19c2..a96ac8e35a 100644
+--- a/src/corelib/serialization/qxmlstream.cpp
++++ b/src/corelib/serialization/qxmlstream.cpp
+@@ -1242,6 +1242,8 @@ inline int QXmlStreamReaderPrivate::fastScanContentCharList()
+ {
+     int n = 0;
+     uint c;
++    uint peekc;
++    bool ignoreLineCount = false;
+     while ((c = getChar()) != StreamEOF) {
+         switch (ushort(c)) {
+         case 0xfffe:
+@@ -1270,12 +1272,22 @@ inline int QXmlStreamReaderPrivate::fastScanContentCharList()
+             return n;
+         } break;
+         case '\r':
+-            if ((c = filterCarriageReturn()) == 0)
++            peekc = peekChar();
++            if (peekc == '\n') {
++                ignoreLineCount = true; // as we want to count just one line for \r\n
++            }
++            if (peekc == StreamEOF) {
++                putChar('\r');
+                 return n;
++            }
+             Q_FALLTHROUGH();
+         case '\n':
+-            ++lineNumber;
+-            lastLineStart = characterOffset + readBufferPos;
++            if (ignoreLineCount) { 
++                ignoreLineCount = false;
++            } else {
++                ++lineNumber;
++                lastLineStart = characterOffset + readBufferPos;
++            }
+             Q_FALLTHROUGH();
+         case ' ':
+         case '\t':
+-- 
+2.26.1.windows.1
+
