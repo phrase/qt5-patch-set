@@ -1,0 +1,33 @@
+From 895aa4cfffc602e229ff19b9e6ac72065f0ecb79 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Wed, 27 Jan 2021 16:37:04 +0100
+Subject: [PATCH] revert changes from QTBUG-83135
+
+Change-Id: I2f0c8c970a010a22581d8cd8be63c125d04398ec
+---
+ src/widgets/widgets/qmainwindowlayout.cpp | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/src/widgets/widgets/qmainwindowlayout.cpp b/src/widgets/widgets/qmainwindowlayout.cpp
+index 4668ef2ea3..e744620223 100644
+--- a/src/widgets/widgets/qmainwindowlayout.cpp
++++ b/src/widgets/widgets/qmainwindowlayout.cpp
+@@ -1771,15 +1771,6 @@ bool QMainWindowTabBar::event(QEvent *e)
+ 
+ QTabBar *QMainWindowLayout::getTabBar()
+ {
+-    if (!usedTabBars.isEmpty()) {
+-        /*
+-            If dock widgets have been removed and added while the main window was
+-            hidden, then the layout hasn't been activated yet, and tab bars from empty
+-            docking areas haven't been put in the cache yet.
+-        */
+-        activate();
+-    }
+-
+     QTabBar *result = nullptr;
+     if (!unusedTabBars.isEmpty()) {
+         result = unusedTabBars.takeLast();
+-- 
+2.26.1.windows.1
+
