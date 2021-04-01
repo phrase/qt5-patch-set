@@ -1,0 +1,59 @@
+From 71be372d8a79f6995d07ec2c3a04292296ac8ddc Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Thu, 1 Apr 2021 11:05:28 +0200
+Subject: [PATCH] process carriage return similar to new line TP-39389
+
+Change-Id: Ie63ad7708b45336633fabb43e911d32264c728f5
+---
+ src/corelib/serialization/qxmlstream.cpp |  3 ---
+ src/corelib/serialization/qxmlstream_p.h | 13 +------------
+ 2 files changed, 1 insertion(+), 15 deletions(-)
+
+diff --git a/src/corelib/serialization/qxmlstream.cpp b/src/corelib/serialization/qxmlstream.cpp
+index 4f282f19c2..abbd5999ef 100644
+--- a/src/corelib/serialization/qxmlstream.cpp
++++ b/src/corelib/serialization/qxmlstream.cpp
+@@ -1270,9 +1270,6 @@ inline int QXmlStreamReaderPrivate::fastScanContentCharList()
+             return n;
+         } break;
+         case '\r':
+-            if ((c = filterCarriageReturn()) == 0)
+-                return n;
+-            Q_FALLTHROUGH();
+         case '\n':
+             ++lineNumber;
+             lastLineStart = characterOffset + readBufferPos;
+diff --git a/src/corelib/serialization/qxmlstream_p.h b/src/corelib/serialization/qxmlstream_p.h
+index 103b123b10..448ff00dad 100644
+--- a/src/corelib/serialization/qxmlstream_p.h
++++ b/src/corelib/serialization/qxmlstream_p.h
+@@ -1131,18 +1131,6 @@ bool QXmlStreamReaderPrivate::parse()
+             case 0xffff:
+                 token = ERROR;
+                 break;
+-            case '\r':
+-                token = SPACE;
+-                if (cu == '\r') {
+-                    if ((token_char = filterCarriageReturn())) {
+-                        ++lineNumber;
+-                        lastLineStart = characterOffset + readBufferPos;
+-                        break;
+-                    }
+-                } else {
+-                    break;
+-                }
+-                Q_FALLTHROUGH();
+             case ~0U: {
+                 token = EOF_SYMBOL;
+                 if (!tagsDone && !inParseEntity) {
+@@ -1154,6 +1142,7 @@ bool QXmlStreamReaderPrivate::parse()
+                 }
+ 
+             } break;
++            case '\r':
+             case '\n':
+                 ++lineNumber;
+                 lastLineStart = characterOffset + readBufferPos;
+-- 
+2.26.1.windows.1
+
