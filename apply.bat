@@ -16,7 +16,7 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0109-missing-trailingSpaces-in-QTextLineItemIterator.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0110-fix-Ctrl-Tab-on-osx.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0111-ignore-font-8514oem-QTBUG-69634.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0112-process-carriage-return-and-new-line-as-just-one-lin.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0112-process-carriage-return-similar-to-new-line.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0113-fix-long-press-to-show-popover-on-osx-QTBUG-71394.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0114-revert-changes-from-QTBUG-83135-TP-46633.patch
 

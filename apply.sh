@@ -15,7 +15,7 @@ patch -p1 < 0106-fix-for-QTBUG-69288.patch
 
 patch -p1 < 0109-missing-trailingSpaces-in-QTextLineItemIterator.patch
 patch -p1 < 0110-fix-Ctrl-Tab-on-osx.patch
-patch -p1 < 0112-process-carriage-return-and-new-line-as-just-one-lin.patch
+patch -p1 < 0112-process-carriage-return-similar-to-new-line.patch
 patch -p1 < 0113-fix-long-press-to-show-popover-on-osx-QTBUG-71394.patch
 patch -p1 < 0114-revert-changes-from-QTBUG-83135-TP-46633.patch
 
