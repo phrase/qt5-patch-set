@@ -19,6 +19,7 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0112-process-carriage-return-similar-to-new-line.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0113-fix-long-press-to-show-popover-on-osx-QTBUG-71394.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0114-revert-changes-from-QTBUG-83135-TP-46633.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0115-always-escape-whitespace-characters-to-keep-newlines.patch
 
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0200-draw-text-misspelling-our-way.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0201-filter-more-date-for-completer-properly-handle-parti.patch

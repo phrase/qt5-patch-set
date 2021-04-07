@@ -1,0 +1,27 @@
+From bae00149d41ff22a5dca18b879eb31f546c2f87e Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Wed, 7 Apr 2021 15:29:24 +0200
+Subject: [PATCH] always escape whitespace characters to keep newlines and
+ carriage return TP-47747
+
+Change-Id: I2c9212522e621cd948a8b2ce728fe7cfc22bffa6
+---
+ src/corelib/serialization/qxmlstream.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/corelib/serialization/qxmlstream.cpp b/src/corelib/serialization/qxmlstream.cpp
+index abbd5999ef..7b73022687 100644
+--- a/src/corelib/serialization/qxmlstream.cpp
++++ b/src/corelib/serialization/qxmlstream.cpp
+@@ -3628,7 +3628,7 @@ void QXmlStreamWriter::writeCharacters(const QString &text)
+ {
+     Q_D(QXmlStreamWriter);
+     d->finishStartElement();
+-    d->writeEscaped(text);
++    d->writeEscaped(text, true);
+ }
+ 
+ 
+-- 
+2.26.1.windows.1
+
