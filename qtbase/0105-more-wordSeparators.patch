@@ -1,23 +1,27 @@
-From 40c78ad5f7c9089784a61e73ec6c8727affccc68 Mon Sep 17 00:00:00 2001
-From: "michal.lazo" <michal.lazo@memsource.com>
-Date: Tue, 10 Apr 2018 16:27:33 +0200
+From a843017baeef3b16492bd2897c76bafac76656f3 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Wed, 6 Apr 2022 13:14:31 +0200
 Subject: [PATCH] more wordSeparators
 
+Change-Id: Icadfe7c2f14a692a6a2280ab7a8d067b0bad8cb2
 ---
- src/gui/text/qtextengine.cpp | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ src/gui/text/qtextengine.cpp | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
 diff --git a/src/gui/text/qtextengine.cpp b/src/gui/text/qtextengine.cpp
-index 4d24fb5..442f1ae 100644
+index b7459bf826..8898e995cf 100644
 --- a/src/gui/text/qtextengine.cpp
 +++ b/src/gui/text/qtextengine.cpp
-@@ -2625,6 +2625,39 @@ bool QTextEngine::atWordSeparator(int position) const
+@@ -3044,6 +3044,42 @@ bool QTextEngine::atWordSeparator(int position) const
      case '~':
      case '|':
      case '\\':
 +    // Double Angle Quotation Mark   
 +    case 0x00AB:
 +    case 0x00BB:
++    // EmDash and EnDash
++    case 0x2013:
++    case 0x2014:
 +    // Quotation marks in Unicode
 +    case 0x2018:
 +    case 0x2019:
@@ -52,5 +56,5 @@ index 4d24fb5..442f1ae 100644
      default:
          break;
 -- 
-2.9.2.windows.1
+2.26.1.windows.1
 
