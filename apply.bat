@@ -1,9 +1,9 @@
 cd %MEMSOURCE_LIB%\qt5
 
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase qtbase /S
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtdeclarative qtdeclarative /S
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols qtquickcontrols /S
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtwebengine qtwebengine /S
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase qtbase /S/Y
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtdeclarative qtdeclarative /S/Y
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols qtquickcontrols /S/Y
+xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtwebengine qtwebengine /S/Y
 
 cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0100-default-debug-compilation-flags-for-msvc-Od-Ob0.patch
