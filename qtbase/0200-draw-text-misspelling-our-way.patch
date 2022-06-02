@@ -1,19 +1,18 @@
-From a79d5ab889c372c1dd95cf1aa3a771ada0162f06 Mon Sep 17 00:00:00 2001
-From: "michal.lazo" <michal.lazo@memsource.com>
-Date: Tue, 10 Apr 2018 12:37:29 +0200
+From 1abf39c94e9a7a68f7368cde57637bf9aabb01f8 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Thu, 2 Jun 2022 14:16:38 +0200
 Subject: [PATCH] draw text misspelling our way
 
 ---
- src/gui/painting/qpainter.cpp | 56 ++++++++++++++++++++++++++++++++++++++++---
- src/gui/text/qtextformat.cpp  |  6 +++++
- src/gui/text/qtextformat.h    |  5 ++++
- 3 files changed, 64 insertions(+), 3 deletions(-)
+ src/gui/painting/qpainter.cpp | 56 +++++++++++++++++++++++++++++++++--
+ src/gui/text/qtextformat.h    |  1 +
+ 2 files changed, 54 insertions(+), 3 deletions(-)
 
 diff --git a/src/gui/painting/qpainter.cpp b/src/gui/painting/qpainter.cpp
-index 49d8fd2..713d17b 100644
+index 5883cc5bbe..bd85dd2831 100644
 --- a/src/gui/painting/qpainter.cpp
 +++ b/src/gui/painting/qpainter.cpp
-@@ -6228,12 +6228,56 @@ static QPixmap generateWavyPixmap(qreal maxRadius, const QPen &pen)
+@@ -5973,12 +5973,56 @@ static QPixmap generateWavyPixmap(qreal maxRadius, const QPen &pen)
      return pixmap;
  }
  
@@ -66,12 +65,12 @@ index 49d8fd2..713d17b 100644
                                     const QTextCharFormat &charFormat)
  {
      if (underlineStyle == QTextCharFormat::NoUnderline
-+        && !charFormat.misspelling()
++        && !charFormat.boolProperty( TextMisspelling )
          && !(flags & (QTextItem::StrikeOut | QTextItem::Overline)))
          return;
  
-@@ -6254,6 +6298,9 @@ static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const
-         painter->setRenderHint(QPainter::Qt4CompatiblePainting, false);
+@@ -5993,6 +6037,9 @@ static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const
+     QLineF line(qFloor(pos.x()), pos.y(), qFloor(pos.x() + width), pos.y());
  
      const qreal underlineOffset = fe->underlinePosition().toReal();
 +    // deliberately ceil the offset to avoid the underline coming too close to
@@ -80,7 +79,7 @@ index 49d8fd2..713d17b 100644
  
      if (underlineStyle == QTextCharFormat::SpellCheckUnderline) {
          QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme();
-@@ -6266,15 +6313,14 @@ static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const
+@@ -6005,15 +6052,14 @@ static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const
      if (underlineStyle == QTextCharFormat::WaveUnderline) {
          painter->save();
          painter->translate(0, pos.y() + 1);
@@ -98,57 +97,29 @@ index 49d8fd2..713d17b 100644
  
          painter->setBrushOrigin(painter->brushOrigin().x(), 0);
          painter->fillRect(pos.x(), 0, qCeil(width), qMin(wave.height(), descent), wave);
-@@ -6299,6 +6345,10 @@ static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const
+@@ -6038,6 +6084,10 @@ static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const
              painter->drawLine(underline);
      }
  
-+    if (charFormat.misspelling()) {
++    if (charFormat.boolProperty( TextMisspelling )) {
 +        drawMisspellingUnderline( painter, pen, pos, width, fe->descent().toReal(), underlinePos );
 +    }
 +
      pen.setStyle(Qt::SolidLine);
      pen.setColor(oldPen.color());
  
-diff --git a/src/gui/text/qtextformat.cpp b/src/gui/text/qtextformat.cpp
-index 36e0a77..020bf00 100644
---- a/src/gui/text/qtextformat.cpp
-+++ b/src/gui/text/qtextformat.cpp
-@@ -1486,6 +1486,12 @@ void QTextCharFormat::setUnderlineStyle(UnderlineStyle style)
-     setProperty(FontUnderline, style == SingleUnderline);
- }
- 
-+void QTextCharFormat::setMisspelling(bool misspelling)
-+{
-+    setProperty(TextMisspelling, misspelling);
-+}
-+
-+
- /*!
-     \fn void QTextCharFormat::setFontOverline(bool overline)
- 
 diff --git a/src/gui/text/qtextformat.h b/src/gui/text/qtextformat.h
-index 28c3035..f60cdb8 100644
+index 91f76e9987..1c51789b5a 100644
 --- a/src/gui/text/qtextformat.h
 +++ b/src/gui/text/qtextformat.h
 @@ -205,6 +205,7 @@ public:
-         TextOutline = 0x2022,
-         TextUnderlineStyle = 0x2023,
-         TextToolTip = 0x2024,
-+        TextMisspelling = 0x2025,
+         TextSuperScriptBaseline = 0x2025,
+         TextSubScriptBaseline = 0x2026,
+         TextBaselineOffset = 0x2027,
++        TextMisspelling = 0x2028,
  
          IsAnchor = 0x2030,
          AnchorHref = 0x2031,
-@@ -513,6 +514,10 @@ public:
-     inline UnderlineStyle underlineStyle() const
-     { return static_cast<UnderlineStyle>(intProperty(TextUnderlineStyle)); }
- 
-+    void setMisspelling(bool misspelling);
-+    inline bool misspelling() const
-+    { return static_cast<UnderlineStyle >( boolProperty( TextMisspelling ) ); }
-+
-     inline void setVerticalAlignment(VerticalAlignment alignment)
-     { setProperty(TextVerticalAlignment, alignment); }
-     inline VerticalAlignment verticalAlignment() const
 -- 
-2.9.2.windows.1
+2.26.1.windows.1
 

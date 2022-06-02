@@ -42,7 +42,7 @@ REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0113-fix-long-
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0114-revert-changes-from-QTBUG-83135-TP-46633.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0115-always-escape-whitespace-characters-to-keep-newlines.patch
 
-REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0200-draw-text-misspelling-our-way.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0200-draw-text-misspelling-our-way.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0201-filter-more-date-for-completer-properly-handle-parti.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0202-QSyntaxHighlighter-merge-char-formats.patch
 REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0203-word-like-lay-outing-and-proper-line-break.patch
