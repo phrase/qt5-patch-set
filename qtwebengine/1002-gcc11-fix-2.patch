@@ -1,0 +1,24 @@
+From 6e281fc0bee92ed0b6225dacb1b98b5b66add016 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Wed, 25 May 2022 09:41:33 +0200
+Subject: [PATCH] gcc11 fix 2
+
+---
+ .../perfetto/src/trace_processor/containers/string_pool.h        | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/chromium/third_party/perfetto/src/trace_processor/containers/string_pool.h b/chromium/third_party/perfetto/src/trace_processor/containers/string_pool.h
+index 11ae91cfeca..6b76b74c91b 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/containers/string_pool.h
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/containers/string_pool.h
+@@ -17,6 +17,7 @@
+ #ifndef SRC_TRACE_PROCESSOR_CONTAINERS_STRING_POOL_H_
+ #define SRC_TRACE_PROCESSOR_CONTAINERS_STRING_POOL_H_
+ 
++#include <limits>
+ #include <stddef.h>
+ #include <stdint.h>
+ 
+-- 
+2.36.1
+
