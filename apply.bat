@@ -57,6 +57,7 @@ cd ..
 
 cd qtquickcontrols
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-9859-TabViewStyle-changes.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-qt-6.3.0.patch
 cd ..
 
 cd qtwebengine
