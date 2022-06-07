@@ -38,7 +38,6 @@ REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0104-fix-xToCu
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0110-fix-Ctrl-Tab-on-osx.patch
 REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0111-ignore-font-8514oem-QTBUG-69634.patch
 REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0112-process-carriage-return-similar-to-new-line.patch
-REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0113-fix-long-press-to-show-popover-on-osx-QTBUG-71394.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0114-revert-changes-from-QTBUG-83135-TP-46633.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0115-always-escape-whitespace-characters-to-keep-newlines.patch
 
@@ -61,5 +60,6 @@ cd qtquickcontrols
 cd ..
 
 cd qtwebengine
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0003-noexcept.patch
 REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-disable-useless-check.patch
 cd ..
