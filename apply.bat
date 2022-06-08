@@ -1,25 +1,5 @@
 cd %MEMSOURCE_LIB%\qt5
 
-cd qtbase
-git clean -dfx
-git reset --hard
-cd ..
-
-cd qtdeclarative
-git clean -dfx
-git reset --hard
-cd ..
-
-cd qtquickcontrols
-git clean -dfx
-git reset --hard
-cd ..
-
-cd qtwebengine
-git clean -dfx
-git reset --hard
-cd ..
-
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase qtbase /S/Y
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtdeclarative qtdeclarative /S/Y
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols qtquickcontrols /S/Y
