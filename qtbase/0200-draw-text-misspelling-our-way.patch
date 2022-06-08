@@ -65,7 +65,7 @@ index 5883cc5bbe..bd85dd2831 100644
                                     const QTextCharFormat &charFormat)
  {
      if (underlineStyle == QTextCharFormat::NoUnderline
-+        && !charFormat.boolProperty( TextMisspelling )
++        && !charFormat.boolProperty( QTextCharFormat::TextMisspelling )
          && !(flags & (QTextItem::StrikeOut | QTextItem::Overline)))
          return;
  
@@ -101,7 +101,7 @@ index 5883cc5bbe..bd85dd2831 100644
              painter->drawLine(underline);
      }
  
-+    if (charFormat.boolProperty( TextMisspelling )) {
++    if (charFormat.boolProperty( QTextCharFormat::TextMisspelling )) {
 +        drawMisspellingUnderline( painter, pen, pos, width, fe->descent().toReal(), underlinePos );
 +    }
 +
