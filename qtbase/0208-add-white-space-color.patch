@@ -1,20 +1,30 @@
+From 7211d4646b1f752cc0b617467cfa2757d4bd2856 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Fri, 10 Jun 2022 10:00:08 +0200
+Subject: [PATCH] add whitespace color
+
+---
+ src/gui/text/qtextformat.h   |  1 +
+ src/gui/text/qtextlayout.cpp | 21 +++++++++++++++++----
+ 2 files changed, 18 insertions(+), 4 deletions(-)
+
 diff --git a/src/gui/text/qtextformat.h b/src/gui/text/qtextformat.h
-index d14f2f3c5c..2e495cdd83 100644
+index 1c51789b5a..473ceac0bd 100644
 --- a/src/gui/text/qtextformat.h
 +++ b/src/gui/text/qtextformat.h
-@@ -207,6 +207,7 @@ public:
-         TextUnderlineStyle = 0x2023,
-         TextToolTip = 0x2024,
-         TextMisspelling = 0x2025,
-+        TextWhiteSpaceColor = 0x2026,
+@@ -206,6 +206,7 @@ public:
+         TextSubScriptBaseline = 0x2026,
+         TextBaselineOffset = 0x2027,
+         TextMisspelling = 0x2028,
++        TextWhiteSpaceColor = 0x2029,
  
          IsAnchor = 0x2030,
          AnchorHref = 0x2031,
 diff --git a/src/gui/text/qtextlayout.cpp b/src/gui/text/qtextlayout.cpp
-index 5b4a7d0323..4eb8eb5fcd 100644
+index 05a34aacf1..e3271a6a98 100644
 --- a/src/gui/text/qtextlayout.cpp
 +++ b/src/gui/text/qtextlayout.cpp
-@@ -2635,8 +2635,12 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+@@ -2680,8 +2680,12 @@ void QTextLine::draw_internal(QPainter *p, const QPointF &pos,
                          else
                               x /= 2; // Centered
                          p->setFont(f);
@@ -27,7 +37,7 @@ index 5b4a7d0323..4eb8eb5fcd 100644
                      }
  
                  }
-@@ -2712,14 +2716,20 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+@@ -2757,14 +2761,20 @@ void QTextLine::draw_internal(QPainter *p, const QPointF &pos,
                  }
                  if (visualLine.unicode()) {
                      QBrush c = format.foreground();
@@ -50,21 +60,23 @@ index 5b4a7d0323..4eb8eb5fcd 100644
                  p->drawText(pos, QChar(si.analysis.bidiLevel % 2 ? (ushort)0x21b0 : (ushort)0x21b1));
                  p->setPen(pen);
              } else {
-@@ -2731,11 +2741,15 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
+@@ -2776,11 +2786,14 @@ void QTextLine::draw_internal(QPainter *p, const QPointF &pos,
               || si.analysis.flags == QScriptAnalysis::Nbsp)
              && (eng->option.flags() & QTextOption::ShowTabsAndSpaces)) {
              QBrush c = format.foreground();
 -            if (c.style() != Qt::NoBrush)
 -                p->setPen(c.color());
-             QChar visualSpace(si.analysis.flags == QScriptAnalysis::Space ? (ushort)0xb7 : (ushort)0xb0);
+             const QChar visualSpace = si.analysis.flags == QScriptAnalysis::Space ? u'\xb7' : u'\xb0';
              QFont oldFont = p->font();
              p->setFont(eng->font(si));
 +            QColor wsColor = format.colorProperty(QTextFormat::TextWhiteSpaceColor);
-+            if (wsColor.isValid()) {
++            if (wsColor.isValid())
 +                p->setPen(wsColor);
-+            } else if (c.style() != Qt::NoBrush) {
++            else if (c.style() != Qt::NoBrush)
 +                p->setPen(c.color());
-+            }
              p->drawText(QPointF(iterator.x.toReal(), itemBaseLine.toReal()), visualSpace);
              p->setPen(pen);
              p->setFont(oldFont);
+-- 
+2.26.1.windows.1
+

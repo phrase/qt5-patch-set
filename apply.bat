@@ -10,7 +10,6 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0100-default-debug-compilation-flags-for-msvc-Od-Ob0.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0101-10289-support-CJK-overwrite.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0102-disable-generating-documentContentChanged-with-rehig.patch
-REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0104-fix-xToCursor-to-better-handle-RTL.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0105-more-wordSeparators.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0106-fix-for-QTBUG-69288.patch
 
@@ -24,11 +23,11 @@ REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0112-process-c
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0200-draw-text-misspelling-our-way.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0201-filter-more-date-for-completer-properly-handle-parti.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0202-QSyntaxHighlighter-merge-char-formats.patch
-REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0203-word-like-lay-outing-and-proper-line-break.patch
-REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0204-show-LTR-and-RTL-bidi-operators.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0203-word-like-lay-outing-and-proper-line-break.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0204-show-LTR-and-RTL-bidi-operators.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0206-preallocate-formatChanges-also-for-whole-block-lengt.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
-REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0208-add-white-space-color.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0208-add-white-space-color.patch
 cd ..
 
 cd qtdeclarative
