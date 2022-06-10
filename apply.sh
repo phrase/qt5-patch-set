@@ -34,7 +34,6 @@ patch -p1 < 0002-qt-6.3.0.patch
 cd ..
 
 cd qtwebengine
-patch -p1 < 0001-enable-ninjaflags-as-env-variable.patch
 cd ..
 
 
