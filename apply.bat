@@ -1,7 +1,6 @@
 cd %MEMSOURCE_LIB%\qt5
 
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase qtbase /S/Y
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtdeclarative qtdeclarative /S/Y
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols qtquickcontrols /S/Y
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtwebengine qtwebengine /S/Y
 
@@ -16,7 +15,7 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0109-missing-trailingSpaces-in-QTextLineItemIterator.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0110-fix-Ctrl-Tab-on-osx.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0111-ignore-font-8514oem-QTBUG-69634.patch
-REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0112-process-carriage-return-similar-to-new-line.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0112-process-carriage-return-similar-to-new-line.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0114-revert-changes-from-QTBUG-83135-TP-46633.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0115-always-escape-whitespace-characters-to-keep-newlines.patch
 
@@ -30,10 +29,6 @@ REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0112-process-c
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0208-add-white-space-color.patch
 cd ..
 
-cd qtdeclarative
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-ifdef-lcdnumber.patch 
-cd ..
-
 cd qtquickcontrols
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-9859-TabViewStyle-changes.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-qt-6.3.0.patch
@@ -41,5 +36,4 @@ cd ..
 
 cd qtwebengine
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0003-noexcept.patch
-REM fix this patch "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-disable-useless-check.patch
 cd ..

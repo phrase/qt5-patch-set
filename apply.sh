@@ -3,13 +3,13 @@
 cd ${MEMSOURCE_LIB}/qt5
 
 cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtbase .
+cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtquickcontrols .
 cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtwebengine .
 
 cd qtbase
 patch -p1 < 0100-default-debug-compilation-flags-for-msvc-Od-Ob0.patch
 patch -p1 < 0101-10289-support-CJK-overwrite.patch
 patch -p1 < 0102-disable-generating-documentContentChanged-with-rehig.patch
-patch -p1 < 0104-fix-xToCursor-to-better-handle-RTL.patch
 patch -p1 < 0105-more-wordSeparators.patch
 patch -p1 < 0106-fix-for-QTBUG-69288.patch
 
@@ -29,7 +29,12 @@ patch -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 patch -p1 < 0208-add-white-space-color.patch
 cd ..
 
+cd qtquickcontrols
+patch -p1 < 0002-qt-6.3.0.patch
+cd ..
+
 cd qtwebengine
 patch -p1 < 0001-enable-ninjaflags-as-env-variable.patch
-patch -p1 < 0002-disable-useless-check.patch
 cd ..
+
+
