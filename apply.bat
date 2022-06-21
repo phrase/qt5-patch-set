@@ -27,6 +27,8 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0206-preallocate-formatChanges-also-for-whole-block-lengt.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0208-add-white-space-color.patch
+
+"C:\Program Files\Git\usr\bin\patch.exe" -R -p1 < 1000-zlib-as-static-library.patch
 cd ..
 
 cd qtquickcontrols
