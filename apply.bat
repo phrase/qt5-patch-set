@@ -29,6 +29,7 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0208-add-white-space-color.patch
 
 "C:\Program Files\Git\usr\bin\patch.exe" -R -p1 < 1000-zlib-as-static-library.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1001-Map-the-verbose-configure-option-to-CMake.patch
 cd ..
 
 cd qtquickcontrols
