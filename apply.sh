@@ -27,8 +27,6 @@ patch -p1 < 0204-show-LTR-and-RTL-bidi-operators.patch
 patch -p1 < 0206-preallocate-formatChanges-also-for-whole-block-lengt.patch
 patch -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 patch -p1 < 0208-add-white-space-color.patch
-
-patch -p1 < 1001-Map-the-verbose-configure-option-to-CMake.patch
 cd ..
 
 cd qtquickcontrols
