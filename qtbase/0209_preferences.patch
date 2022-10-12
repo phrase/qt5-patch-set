@@ -1,0 +1,15 @@
+diff --git a/src/plugins/platforms/cocoa/qcocoamenuitem.mm b/src/plugins/platforms/cocoa/qcocoamenuitem.mm
+index 688f0504a6..af78a4570c 100644
+--- a/src/plugins/platforms/cocoa/qcocoamenuitem.mm
++++ b/src/plugins/platforms/cocoa/qcocoamenuitem.mm
+@@ -368,9 +368,7 @@ QString QCocoaMenuItem::mergeText()
+ QKeySequence QCocoaMenuItem::mergeAccel()
+ {
+     QCocoaMenuLoader *loader = [QCocoaMenuLoader sharedMenuLoader];
+-    if (m_native == [loader preferencesMenuItem])
+-        return QKeySequence(QKeySequence::Preferences);
+-    else if (m_native == [loader quitMenuItem])
++    if (m_native == [loader quitMenuItem])
+         return QKeySequence(QKeySequence::Quit);
+     else if (m_text.contains('\t'))
+         return QKeySequence(m_text.mid(m_text.indexOf('\t') + 1), QKeySequence::NativeText);
