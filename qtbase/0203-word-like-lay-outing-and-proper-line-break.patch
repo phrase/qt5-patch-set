@@ -141,8 +141,9 @@ index 4494b52835..a14f63cf93 100644
 +                if (!useWordLikeLayout &&
 +                    (lbh.currentPosition >= eng->layoutData->string.length()
                      || isBreakableSpace
--                    || attributes[lbh.currentPosition].lineBreak) {
-+                    || attributes[lbh.currentPosition].lineBreak)) {
+                     || attributes[lbh.currentPosition].lineBreak
+-                    || lbh.tmpData.textWidth >= QFIXED_MAX) {
++                    || lbh.tmpData.textWidth >= QFIXED_MAX)) {
                      sb_or_ws = true;
                      break;
 +                } else if (useWordLikeLayout &&

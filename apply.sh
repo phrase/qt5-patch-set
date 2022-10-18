@@ -31,9 +31,6 @@ patch -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 patch -p1 < 0208-add-white-space-color.patch
 
 patch -p1 --forward < 1000-cast_types_for_egl_x11_test.diff
-patch -p1 --forward < 1001-gcc_11_limits.diff
-patch -p1 --forward < 1002-moc_handle_include.diff
-
 cd ..
 
 cd qtdeclarative
@@ -43,8 +40,4 @@ cd ..
 
 cd qtwebengine
 patch -p1 < 0001-enable-ninjaflags-as-env-variable.patch
-patch -p1 < 0002-disable-useless-check.patch
-patch -p1 --forward < 1000-gcc11-fix.patch
-patch -p1 --forward < 1001-python2.patch
-patch -p1 --forward < 1002-gcc11-fix-2.patch
 cd ..

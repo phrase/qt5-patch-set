@@ -3,7 +3,6 @@ cd %MEMSOURCE_LIB%\qt5
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase qtbase /S
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtdeclarative qtdeclarative /S
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols qtquickcontrols /S
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtwebengine qtwebengine /S
 
 cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0100-default-debug-compilation-flags-for-msvc-Od-Ob0.patch
@@ -37,8 +36,4 @@ cd ..
 
 cd qtquickcontrols
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-9859-TabViewStyle-changes.patch
-cd ..
-
-cd qtwebengine
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-disable-useless-check.patch
 cd ..
