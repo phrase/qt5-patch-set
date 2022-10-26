@@ -133,7 +133,7 @@ index 4494b52835..a14f63cf93 100644
                  addNextCluster(lbh.currentPosition, end, lbh.tmpData, lbh.glyphCount,
                                 current, lbh.logClusters, lbh.glyphs, &accumulatedTextWidth);
  
-@@ -1974,11 +2002,17 @@ void QTextLine::layout_helper(int maxGlyphs)
+@@ -1974,12 +2002,18 @@ void QTextLine::layout_helper(int maxGlyphs)
                                          && attributes[lbh.currentPosition].whiteSpace
                                          && eng->layoutData->string.at(lbh.currentPosition).decompositionTag() != QChar::NoBreak;
  
