@@ -1,0 +1,18 @@
+diff --git a/src/plugins/platforms/cocoa/qcocoamenuitem.mm b/src/plugins/platforms/cocoa/qcocoamenuitem.mm
+index 258aee82a5..34fe12017b 100644
+--- a/src/plugins/platforms/cocoa/qcocoamenuitem.mm
++++ b/src/plugins/platforms/cocoa/qcocoamenuitem.mm
+@@ -302,11 +310,8 @@ NSUInteger keySequenceModifierMask(const QKeySequence &accel)
+                 QCocoaMenuObject *menuObject = dynamic_cast<QCocoaMenuObject *>(p);
+                 p = menuObject ? menuObject->menuParent() : nullptr;
+             }
+-
+-            if (menubar && depth < 3)
+-                m_detectedRole = detectMenuRole(m_text);
+-            else
+-                m_detectedRole = NoRole;
++            // no autodetection of roles
++            m_detectedRole = NoRole;
+         }
+ 
+         QCocoaMenuLoader *loader = [QCocoaMenuLoader sharedMenuLoader];
