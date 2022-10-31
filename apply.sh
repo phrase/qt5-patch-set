@@ -29,8 +29,6 @@ patch -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 patch -p1 < 0208-add-white-space-color.patch
 patch -p1 < 0209_preferences.patch
 patch -p1 < 0210_disable_autodetect_menurole.patch
-
-patch -p1 --forward < 1000-cast_types_for_egl_x11_test.diff
 cd ..
 
 cd qtquickcontrols
