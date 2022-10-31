@@ -38,7 +38,6 @@ patch -p1 --forward < 1000-cast_types_for_egl_x11_test.diff
 cd ..
 
 cd qtdeclarative
-patch -p1 < 1000_gcc_11.patch
 patch -p1 < 1001_disable_qmltest.patch
 cd ..
 
