@@ -1,0 +1,31 @@
+From 6a15d44b368da8656ce1520adeb794f0e488cceb Mon Sep 17 00:00:00 2001
+From: Michal Klocek <michal.klocek@qt.io>
+Date: Thu, 27 Oct 2022 16:35:51 +0200
+Subject: [PATCH] Require minimum msvc version 14.29
+
+Instead of fixing the code to compile with lower version,
+simply require at least version present on ci.
+
+Fixes: QTBUG-108029
+Pick-to: 6.4
+Change-Id: Ie6fbd7c3451a39c09dfb15e0cf9850672c9d4ea8
+---
+
+diff --git a/configure.cmake b/configure.cmake
+index 9c17711..37ac1f4 100644
+--- a/configure.cmake
++++ b/configure.cmake
+@@ -558,6 +558,13 @@
+ )
+ 
+ if(WIN32)
++    if(CMAKE_CXX_COMPILER_ID STREQUAL MSVC)
++        add_check_for_support(
++            MODULES QtWebEngine QtPdf
++            CONDITION NOT MSVC_VERSION LESS 1929
++            MESSAGE "MSVC compiler version must be at least 14.29."
++        )
++    endif()
+     set(windowsSdkVersion $ENV{WindowsSDKVersion})
+     string(REGEX REPLACE "([0-9.]+).*" "\\1" windowsSdkVersion "${windowsSdkVersion}")
+     string(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" sdkMinor "${windowsSdkVersion}")

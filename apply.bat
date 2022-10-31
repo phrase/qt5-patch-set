@@ -31,7 +31,7 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0210_disable_autodetect_menurole.patch
 cd ..
 
-"C:\Program Files\Git\usr\bin\patch.exe" -R -p1 < 1000-zlib-as-static-library.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 1000-disable-zlib-as-static-library.patch
 cd ..
 
 cd qtquickcontrols
@@ -40,5 +40,6 @@ cd qtquickcontrols
 cd ..
 
 cd qtwebengine
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0003-noexcept.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-Require-minimum-msvc-version-14-29.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-Fix-Windows-build-with-enable-plugins-false.patch
 cd ..

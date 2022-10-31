@@ -36,6 +36,8 @@ patch -p1 < 0002-qt-6.3.0.patch
 cd ..
 
 cd qtwebengine
+patch -p1 < 0001-Require-minimum-msvc-version-14-29.patch
+patch -p1 < 0002-Fix-Windows-build-with-enable-plugins-false.patch
 cd ..
 
 

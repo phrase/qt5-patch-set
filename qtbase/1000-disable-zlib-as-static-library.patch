@@ -1,0 +1,366 @@
+From 1ad123d517eb6b005f2aac11b5da03b85ebb63d8 Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Wed, 26 Oct 2022 20:47:56 +0200
+Subject: [PATCH] disable zlib as static library
+
+---
+ cmake/FindWrapSystemZLIB.cmake   | 29 --------------------
+ cmake/FindWrapZLIB.cmake         | 40 ++++++++++++++++++++--------
+ configure.cmake                  |  5 ++--
+ src/3rdparty/zlib/CMakeLists.txt | 45 --------------------------------
+ src/3rdparty/zlib/qtpatches.diff | 27 ++++++++++++++-----
+ src/3rdparty/zlib/src/gzguts.h   | 15 ++++++++++-
+ src/3rdparty/zlib/src/zutil.h    |  4 ++-
+ src/CMakeLists.txt               |  5 ----
+ src/corelib/CMakeLists.txt       | 35 ++++++++++++++++++++++---
+ 9 files changed, 101 insertions(+), 104 deletions(-)
+ delete mode 100644 cmake/FindWrapSystemZLIB.cmake
+ delete mode 100644 src/3rdparty/zlib/CMakeLists.txt
+
+diff --git a/cmake/FindWrapSystemZLIB.cmake b/cmake/FindWrapSystemZLIB.cmake
+deleted file mode 100644
+index c109a598be..0000000000
+--- a/cmake/FindWrapSystemZLIB.cmake
++++ /dev/null
+@@ -1,29 +0,0 @@
+-# We can't create the same interface imported target multiple times, CMake will complain if we do
+-# that. This can happen if the find_package call is done in multiple different subdirectories.
+-if(TARGET WrapSystemZLIB::WrapSystemZLIB)
+-    set(WrapSystemZLIB_FOUND ON)
+-    return()
+-endif()
+-
+-set(WrapSystemZLIB_FOUND OFF)
+-
+-find_package(ZLIB ${${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION})
+-
+-if(ZLIB_FOUND)
+-    set(WrapSystemZLIB_FOUND ON)
+-
+-    add_library(WrapSystemZLIB::WrapSystemZLIB INTERFACE IMPORTED)
+-    if(APPLE)
+-        # On Darwin platforms FindZLIB sets IMPORTED_LOCATION to the absolute path of the library
+-        # within the framework. This ends up as an absolute path link flag, which we don't want,
+-        # because that makes our .prl files un-relocatable and also breaks iOS simulator_and_device
+-        # SDK switching in Xcode.
+-        # Just pass a linker flag instead.
+-        target_link_libraries(WrapSystemZLIB::WrapSystemZLIB INTERFACE "-lz")
+-    else()
+-        target_link_libraries(WrapSystemZLIB::WrapSystemZLIB INTERFACE ZLIB::ZLIB)
+-    endif()
+-endif()
+-
+-include(FindPackageHandleStandardArgs)
+-find_package_handle_standard_args(WrapSystemZLIB DEFAULT_MSG WrapSystemZLIB_FOUND)
+diff --git a/cmake/FindWrapZLIB.cmake b/cmake/FindWrapZLIB.cmake
+index ecb0070f81..585dc5e95e 100644
+--- a/cmake/FindWrapZLIB.cmake
++++ b/cmake/FindWrapZLIB.cmake
+@@ -1,11 +1,29 @@
+-include(QtFindWrapHelper NO_POLICY_SCOPE)
+-
+-qt_find_package_system_or_bundled(wrap_zlib
+-    FRIENDLY_PACKAGE_NAME "ZLIB"
+-    WRAP_PACKAGE_TARGET "WrapZLIB::WrapZLIB"
+-    WRAP_PACKAGE_FOUND_VAR_NAME "WrapZLIB_FOUND"
+-    BUNDLED_PACKAGE_NAME "BundledZLIB"
+-    BUNDLED_PACKAGE_TARGET "BundledZLIB"
+-    SYSTEM_PACKAGE_NAME "WrapSystemZLIB"
+-    SYSTEM_PACKAGE_TARGET "WrapSystemZLIB::WrapSystemZLIB"
+-)
++# We can't create the same interface imported target multiple times, CMake will complain if we do
++# that. This can happen if the find_package call is done in multiple different subdirectories.
++if(TARGET WrapZLIB::WrapZLIB)
++    set(WrapZLIB_FOUND ON)
++    return()
++endif()
++
++set(WrapZLIB_FOUND OFF)
++
++find_package(ZLIB ${WrapZLIB_FIND_VERSION})
++
++if(ZLIB_FOUND)
++    set(WrapZLIB_FOUND ON)
++
++    add_library(WrapZLIB::WrapZLIB INTERFACE IMPORTED)
++    if(APPLE)
++        # On Darwin platforms FindZLIB sets IMPORTED_LOCATION to the absolute path of the library
++        # within the framework. This ends up as an absolute path link flag, which we don't want,
++        # because that makes our .prl files un-relocatable and also breaks iOS simulator_and_device
++        # SDK switching in Xcode.
++        # Just pass a linker flag instead.
++        target_link_libraries(WrapZLIB::WrapZLIB INTERFACE "-lz")
++    else()
++        target_link_libraries(WrapZLIB::WrapZLIB INTERFACE ZLIB::ZLIB)
++    endif()
++endif()
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(WrapZLIB DEFAULT_MSG WrapZLIB_FOUND)
+diff --git a/configure.cmake b/configure.cmake
+index 0896125703..8178e46434 100644
+--- a/configure.cmake
++++ b/configure.cmake
+@@ -4,7 +4,8 @@
+ 
+ #### Libraries
+ 
+-qt_find_package(WrapSystemZLIB 1.0.8 PROVIDED_TARGETS WrapSystemZLIB::WrapSystemZLIB MODULE_NAME global QMAKE_LIB zlib)
++qt_find_package(WrapZLIB 1.0.8 PROVIDED_TARGETS WrapZLIB::WrapZLIB MODULE_NAME global QMAKE_LIB zlib)
++# special case begin
+ # Work around global target promotion failure when WrapZLIB is used on APPLE platforms.
+ # What ends up happening is that the ZLIB::ZLIB target is not promoted to global by qt_find_package,
+ # then qt_find_package(WrapSystemPNG) tries to find its dependency ZLIB::ZLIB, sees it's not global
+@@ -910,7 +911,7 @@ qt_feature("stack-protector-strong" PRIVATE
+ )
+ qt_feature("system-zlib" PRIVATE
+     LABEL "Using system zlib"
+-    CONDITION WrapSystemZLIB_FOUND
++    CONDITION WrapZLIB_FOUND
+ )
+ qt_feature("zstd" PUBLIC
+     LABEL "Zstandard support"
+diff --git a/src/3rdparty/zlib/CMakeLists.txt b/src/3rdparty/zlib/CMakeLists.txt
+deleted file mode 100644
+index 701dab7dd3..0000000000
+--- a/src/3rdparty/zlib/CMakeLists.txt
++++ /dev/null
+@@ -1,45 +0,0 @@
+-qt_internal_add_3rdparty_library(BundledZLIB
+-    STATIC
+-    SKIP_AUTOMOC
+-    SOURCES
+-        src/adler32.c
+-        src/compress.c
+-        src/crc32.c
+-        src/crc32.h
+-        src/deflate.c
+-        src/deflate.h
+-        src/gzclose.c
+-        src/gzguts.h
+-        src/gzlib.c
+-        src/gzread.c
+-        src/gzwrite.c
+-        src/infback.c
+-        src/inffast.c
+-        src/inffast.h
+-        src/inffixed.h
+-        src/inflate.c
+-        src/inflate.h
+-        src/inftrees.c
+-        src/inftrees.h
+-        src/trees.c
+-        src/trees.h
+-        src/uncompr.c
+-        src/zconf.h
+-        src/zlib.h
+-        src/zutil.c
+-        src/zutil.h
+-    DEFINES
+-        QT_BUILD_CORE_LIB
+-    INCLUDE_DIRECTORIES
+-        $<TARGET_PROPERTY:Core,INCLUDE_DIRECTORIES>
+-)
+-
+-qt_disable_warnings(BundledZLIB)
+-
+-qt_set_symbol_visibility_hidden(BundledZLIB)
+-
+-qt_internal_add_3rdparty_header_module(ZlibPrivate
+-    EXTERNAL_HEADERS
+-        src/zlib.h
+-        src/zconf.h
+-)
+diff --git a/src/3rdparty/zlib/qtpatches.diff b/src/3rdparty/zlib/qtpatches.diff
+index e4e212dda5..b7d150b8fd 100644
+--- a/src/3rdparty/zlib/qtpatches.diff
++++ b/src/3rdparty/zlib/qtpatches.diff
+@@ -15,11 +15,24 @@ diff -ruN orig/ChangeLog src/ChangeLog
+ diff -ruN orig/gzguts.h src/gzguts.h
+ --- orig/gzguts.h
+ +++ src/gzguts.h
+-@@ -3,6 +3,12 @@
++@@ -3,6 +3,25 @@
+   * For conditions of distribution and use, see copyright notice in zlib.h
+   */
+  
+-+#include <qconfig.h>
+++#ifdef _MSC_VER
+++#  ifndef _CRT_SECURE_NO_DEPRECATE
+++#    define _CRT_SECURE_NO_DEPRECATE
+++#  endif
+++#  ifndef _CRT_NONSTDC_NO_DEPRECATE
+++#    define _CRT_NONSTDC_NO_DEPRECATE
+++#  endif
+++// disable warnings like '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+++#  pragma warning(disable: 4267; disable: 4244)
+++#endif
+++
+++#ifndef QT_BOOTSTRAPPED
+++#  include <qconfig.h>
+++#endif
+ +
+ +#ifdef QT_VISIBILITY_AVAILABLE
+ +#define HAVE_HIDDEN
+@@ -104,11 +117,13 @@ diff -ruN orig/zlib.h src/zlib.h
+ diff -ruN orig/zutil.h src/zutil.h
+ --- orig/zutil.h
+ +++ src/zutil.h
+-@@ -13,6 +13,12 @@
++@@ -13,6 +13,14 @@
+  #ifndef ZUTIL_H
+  #define ZUTIL_H
+  
+-+#include <qconfig.h>
+++#ifndef QT_BOOTSTRAPPED
+++#  include <qconfig.h>
+++#endif
+ +
+ +#ifdef QT_VISIBILITY_AVAILABLE
+ +#define HAVE_HIDDEN
+@@ -117,7 +132,7 @@ diff -ruN orig/zutil.h src/zutil.h
+  #ifdef HAVE_HIDDEN
+  #  define ZLIB_INTERNAL __attribute__((visibility ("hidden")))
+  #else
+-@@ -143,6 +149,11 @@
++@@ -143,6 +151,11 @@
+  #    if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
+  #      include <unix.h> /* for fdopen */
+  #    else
+@@ -129,7 +144,7 @@ diff -ruN orig/zutil.h src/zutil.h
+  #      ifndef fdopen
+  #        define fdopen(fd,mode) NULL /* No fdopen() */
+  #      endif
+-@@ -166,7 +177,7 @@
++@@ -166,7 +179,7 @@
+  #  define OS_CODE 18
+  #endif
+  
+diff --git a/src/3rdparty/zlib/src/gzguts.h b/src/3rdparty/zlib/src/gzguts.h
+index 26d2ac9bd0..3ec32af25f 100644
+--- a/src/3rdparty/zlib/src/gzguts.h
++++ b/src/3rdparty/zlib/src/gzguts.h
+@@ -3,7 +3,20 @@
+  * For conditions of distribution and use, see copyright notice in zlib.h
+  */
+ 
+-#include <qconfig.h>
++#ifdef _MSC_VER
++#  ifndef _CRT_SECURE_NO_DEPRECATE
++#    define _CRT_SECURE_NO_DEPRECATE
++#  endif
++#  ifndef _CRT_NONSTDC_NO_DEPRECATE
++#    define _CRT_NONSTDC_NO_DEPRECATE
++#  endif
++// disable warnings like '=': conversion from 'size_t' to 'unsigned int', possible loss of data
++#  pragma warning(disable: 4267; disable: 4244)
++#endif
++
++#ifndef QT_BOOTSTRAPPED
++#  include <qconfig.h>
++#endif
+ 
+ #ifdef QT_VISIBILITY_AVAILABLE
+ #define HAVE_HIDDEN
+diff --git a/src/3rdparty/zlib/src/zutil.h b/src/3rdparty/zlib/src/zutil.h
+index c535e57eb6..0d78483358 100644
+--- a/src/3rdparty/zlib/src/zutil.h
++++ b/src/3rdparty/zlib/src/zutil.h
+@@ -13,7 +13,9 @@
+ #ifndef ZUTIL_H
+ #define ZUTIL_H
+ 
+-#include <qconfig.h>
++#ifndef QT_BOOTSTRAPPED
++#  include <qconfig.h>
++#endif
+ 
+ #ifdef QT_VISIBILITY_AVAILABLE
+ #define HAVE_HIDDEN
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 0e10078bf4..77cdbc4bd9 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -33,11 +33,6 @@ if(QT_FEATURE_regularexpression AND NOT QT_FEATURE_system_pcre2)
+ endif()
+ qt_install_3rdparty_library_wrap_config_extra_file(BundledPcre2)
+ 
+-if(NOT QT_FEATURE_system_zlib)
+-    add_subdirectory(3rdparty/zlib)
+-endif()
+-qt_install_3rdparty_library_wrap_config_extra_file(BundledZLIB)
+-
+ add_subdirectory(corelib)
+ 
+ # Needs to be after corelib, because some of them reference Core.
+diff --git a/src/corelib/CMakeLists.txt b/src/corelib/CMakeLists.txt
+index c683bb46dd..8844ffc593 100644
+--- a/src/corelib/CMakeLists.txt
++++ b/src/corelib/CMakeLists.txt
+@@ -3,7 +3,6 @@
+ # special case begin
+ qt_find_package(Threads PROVIDED_TARGETS Threads::Threads)
+ qt_find_package(WrapPCRE2 PROVIDED_TARGETS WrapPCRE2::WrapPCRE2)
+-qt_find_package(WrapZLIB PROVIDED_TARGETS WrapZLIB::WrapZLIB)
+ 
+ 
+ # compute the reverse relative path from QtCoreConfigExtras to the install prefix
+@@ -282,7 +281,6 @@ qt_internal_add_module(Core
+         ../3rdparty/tinycbor/src
+     LIBRARIES
+         Qt::GlobalConfigPrivate # special case
+-        WrapZLIB::WrapZLIB
+     PRECOMPILED_HEADER
+         "global/qt_pch.h"
+     GENERATE_CPP_EXPORTS
+@@ -692,9 +690,30 @@ qt_internal_extend_target(Core CONDITION QT_FEATURE_std_atomic64
+         WrapAtomic::WrapAtomic
+ )
+ 
+-qt_internal_extend_target(Core CONDITION NOT QT_FEATURE_system_zlib
++qt_internal_extend_target(Core CONDITION QT_FEATURE_system_zlib
+     LIBRARIES
+-        Qt::ZlibPrivate
++        WrapZLIB::WrapZLIB
++)
++
++qt_internal_extend_target(Core CONDITION NOT QT_FEATURE_system_zlib
++    SOURCES
++        ../3rdparty/zlib/src/adler32.c
++        ../3rdparty/zlib/src/compress.c
++        ../3rdparty/zlib/src/crc32.c
++        ../3rdparty/zlib/src/deflate.c
++        ../3rdparty/zlib/src/gzclose.c
++        ../3rdparty/zlib/src/gzlib.c
++        ../3rdparty/zlib/src/gzread.c
++        ../3rdparty/zlib/src/gzwrite.c
++        ../3rdparty/zlib/src/infback.c
++        ../3rdparty/zlib/src/inffast.c
++        ../3rdparty/zlib/src/inflate.c
++        ../3rdparty/zlib/src/inftrees.c
++        ../3rdparty/zlib/src/trees.c
++        ../3rdparty/zlib/src/uncompr.c
++        ../3rdparty/zlib/src/zutil.c
++    INCLUDE_DIRECTORIES
++        ../3rdparty/zlib/src
+ )
+ 
+ qt_internal_extend_target(Core CONDITION QT_FEATURE_commandlineparser
+@@ -1332,6 +1351,14 @@ qt_internal_add_docs(Core
+     doc/qtcore.qdocconf
+ )
+ 
++if(NOT QT_FEATURE_system_zlib)
++    qt_internal_add_3rdparty_header_module(ZlibPrivate
++        EXTERNAL_HEADERS
++            ../3rdparty/zlib/src/zlib.h
++            ../3rdparty/zlib/src/zconf.h
++    )
++endif()
++
+ qt_internal_add_optimize_full_flags()
+ 
+ # Copy / install an lldb python script into the QtCore.framework.dSYM bundle which searches
+-- 
+2.26.1.windows.1
+
