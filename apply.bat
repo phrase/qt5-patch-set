@@ -28,6 +28,8 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0206-preallocate-formatChanges-also-for-whole-block-lengt.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0208-add-white-space-color.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0209_preferences.patch
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0210_disable_autodetect_menurole.patch
 cd ..
 
 cd qtdeclarative
