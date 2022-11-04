@@ -1,7 +1,7 @@
 From a40c6e96bf7a50a9718d349a062310b3a61bc33e Mon Sep 17 00:00:00 2001
 From: "michal.lazo" <michal.lazo@memsource.com>
 Date: Tue, 10 Apr 2018 10:15:12 +0200
-Subject: [PATCH] 10289 support CJK overwrite
+Subject: [PATCH] support CJK overwrite TP-10280
 
 ---
  src/widgets/widgets/qwidgettextcontrol.cpp | 14 ++++++++++++--
