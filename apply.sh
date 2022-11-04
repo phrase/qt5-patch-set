@@ -8,7 +8,7 @@ cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtwebengine .
 
 cd qtbase
 patch -p1 < 0100-default-debug-compilation-flags-for-msvc-Od-Ob0.patch
-patch -p1 < 0101-10289-support-CJK-overwrite.patch
+patch -p1 < 0101-support-CJK-overwrite-TP-10280.patch
 patch -p1 < 0102-disable-generating-documentContentChanged-with-rehig.patch
 patch -p1 < 0105-more-wordSeparators.patch
 patch -p1 < 0106-fix-for-QTBUG-69288.patch
