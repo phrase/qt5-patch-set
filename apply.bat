@@ -38,6 +38,5 @@ cd qtquickcontrols
 cd ..
 
 cd qtwebengine
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-Require-minimum-msvc-version-14-29.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-Fix-Windows-build-with-enable-plugins-false.patch
 cd ..
