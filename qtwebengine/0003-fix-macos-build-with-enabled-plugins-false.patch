@@ -1,0 +1,16 @@
+diff --git a/chromium/sandbox/policy/mac/sandbox_mac.mm b/chromium/sandbox/policy/mac/sandbox_mac.mm
+index 0b479b3aab8..77e70f2b9f3 100644
+--- a/chromium/sandbox/policy/mac/sandbox_mac.mm
++++ b/chromium/sandbox/policy/mac/sandbox_mac.mm
+@@ -71,9 +71,11 @@ std::string GetSandboxProfile(sandbox::mojom::Sandbox sandbox_type) {
+     case sandbox::mojom::Sandbox::kNetwork:
+       profile += kSeatbeltPolicyString_network;
+       break;
++#if BUILDFLAG(ENABLE_PLUGINS)
+     case sandbox::mojom::Sandbox::kPpapi:
+       profile += kSeatbeltPolicyString_ppapi;
+       break;
++#endif
+ #if BUILDFLAG(ENABLE_OOP_PRINTING)
+     case sandbox::mojom::Sandbox::kPrintBackend:
+       profile += kSeatbeltPolicyString_print_backend;
