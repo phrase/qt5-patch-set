@@ -37,6 +37,7 @@ cd ..
 
 cd qtwebengine
 patch -p1 < 0002-Fix-Windows-build-with-enable-plugins-false.patch
+patch -p1 < 0003-fix-macos-build-with-enabled-plugins-false.patch
 cd ..
 
 
