@@ -1,5 +1,5 @@
 diff --git a/src/3rdparty/chromium/content/browser/sandbox_parameters_mac.mm b/src/3rdparty/chromium/content/browser/sandbox_parameters_mac.mm
-index 270f74cd9c0..200cc05c2f2 100644
+index 270f74cd9c0..323ffd062d0 100644
 --- a/src/3rdparty/chromium/content/browser/sandbox_parameters_mac.mm
 +++ b/src/3rdparty/chromium/content/browser/sandbox_parameters_mac.mm
 @@ -20,7 +20,6 @@
@@ -18,11 +18,11 @@ index 270f74cd9c0..200cc05c2f2 100644
  #include "content/public/common/pepper_plugin_info.h"
  #endif
  
- namespace content {
 diff --git a/src/3rdparty/chromium/sandbox/policy/mac/sandbox_mac.mm b/src/3rdparty/chromium/sandbox/policy/mac/sandbox_mac.mm
-index 0b479b3aab8..77e70f2b9f3 100644
+index 0b479b3aab8..e997a5a0e33 100644
 --- a/src/3rdparty/chromium/sandbox/policy/mac/sandbox_mac.mm
 +++ b/src/3rdparty/chromium/sandbox/policy/mac/sandbox_mac.mm
+@@ -12,6 +12,7 @@
  #include "base/files/scoped_file.h"
  #include "base/logging.h"
  #include "base/posix/eintr_wrapper.h"
