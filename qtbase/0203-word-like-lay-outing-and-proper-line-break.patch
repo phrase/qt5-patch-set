@@ -136,9 +136,9 @@ index dfcbf6a786..ece07a7576 100644
                                          && attributes[lbh.currentPosition].whiteSpace
                                          && eng->layoutData->string.at(lbh.currentPosition).decompositionTag() != QChar::NoBreak;
  
--                if (lbh.currentPosition >= eng->layoutData->string.length()
+-                if (lbh.currentPosition >= eng->layoutData->string.size()
 +                if (!useWordLikeLayout 
-+                    && (lbh.currentPosition >= eng->layoutData->string.length()
++                    && (lbh.currentPosition >= eng->layoutData->string.size()
                      || isBreakableSpace
                      || attributes[lbh.currentPosition].lineBreak
 -                    || lbh.tmpData.textWidth >= QFIXED_MAX) {
@@ -146,7 +146,7 @@ index dfcbf6a786..ece07a7576 100644
                      sb_or_ws = true;
                      break;
 +                } else if (useWordLikeLayout 
-+                    && (lbh.currentPosition >= eng->layoutData->string.length()
++                    && (lbh.currentPosition >= eng->layoutData->string.size()
 +                    || (isBreakableSpace && attributes[lbh.currentPosition].lineBreak)
 +                    || lbh.tmpData.textWidth >= QFIXED_MAX)) {
 +                    canBreak = true;
