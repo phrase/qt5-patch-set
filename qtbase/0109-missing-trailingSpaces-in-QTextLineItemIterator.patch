@@ -13,7 +13,7 @@ index 0c7aad789f..9ca34e0cee 100644
 +++ b/src/gui/text/qtextengine.cpp
 @@ -3985,7 +3985,7 @@ QTextLineItemIterator::QTextLineItemIterator(QTextEngine *_eng, int _lineNum, co
        line(eng->lines[_lineNum]),
-       si(0),
+       si(nullptr),
        lineNum(_lineNum),
 -      lineEnd(line.from + line.length),
 +      lineEnd(line.from + line.length + line.trailingSpaces),

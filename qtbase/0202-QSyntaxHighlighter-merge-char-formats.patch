@@ -13,7 +13,7 @@ index e60d5b1..1137657 100644
 +++ b/src/gui/text/qsyntaxhighlighter.cpp
 @@ -444,7 +444,7 @@ void QSyntaxHighlighter::setFormat(int start, int count, const QTextCharFormat &
  
-     const int end = qMin(start + count, d->formatChanges.count());
+     const int end = qMin(start + count, d->formatChanges.size());
      for (int i = start; i < end; ++i)
 -        d->formatChanges[i] = format;
 +        d->formatChanges[i].merge(format);
