@@ -2,7 +2,6 @@ cd %MEMSOURCE_LIB%\qt5
 
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase qtbase /S/Y
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols qtquickcontrols /S/Y
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtwebengine qtwebengine /S/Y
 
 
 cd qtbase
@@ -35,8 +34,4 @@ cd ..
 cd qtquickcontrols
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-9859-TabViewStyle-changes.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-qt-6.3.0.patch
-cd ..
-
-cd qtwebengine
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-Fix-Windows-build-with-enable-plugins-false.patch
 cd ..

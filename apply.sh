@@ -6,7 +6,6 @@ cd ${MEMSOURCE_LIB}/qt5
 
 cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtbase .
 cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtquickcontrols .
-cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtwebengine .
 
 apply_patch() {
   echo "\nApplying $1"
@@ -40,9 +39,4 @@ cd ..
 
 cd qtquickcontrols
 apply_patch 0002-qt-6.3.0.patch
-cd ..
-
-cd qtwebengine
-apply_patch 0002-Fix-Windows-build-with-enable-plugins-false.patch
-apply_patch 0003-fix-macos-build-with-enabled-plugins-false.patch
 cd ..
