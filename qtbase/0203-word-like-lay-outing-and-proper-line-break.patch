@@ -63,7 +63,7 @@ index dfcbf6a786..ece07a7576 100644
      while (newItem < eng->layoutData->items.size()) {
          lbh.resetRightBearing();
          if (newItem != item) {
-@@ -1905,9 +1908,18 @@ void QTextLine::layout_helper(int maxGlyphs)
+@@ -1905,10 +1908,19 @@ void QTextLine::layout_helper(int maxGlyphs)
                  lbh.tmpData.length++;
                  lbh.calculateRightBearingForPreviousGlyph();
              }
@@ -73,6 +73,7 @@ index dfcbf6a786..ece07a7576 100644
 +            } else {
 +                line += lbh.tmpData;
 +            }
+             manuallyWrapped = true;
              goto found;
          } else if (current.analysis.flags == QScriptAnalysis::Object) {
 +            if (useWordLikeLayout &&
@@ -99,19 +100,19 @@ index dfcbf6a786..ece07a7576 100644
              while (lbh.currentPosition < end
                     && attributes[lbh.currentPosition].whiteSpace
                     && eng->layoutData->string.at(lbh.currentPosition).decompositionTag() != QChar::NoBreak) {
-@@ -1941,16 +1955,30 @@ void QTextLine::layout_helper(int maxGlyphs)
+@@ -1941,14 +1955,31 @@ void QTextLine::layout_helper(int maxGlyphs)
                                 current, lbh.logClusters, lbh.glyphs);
              }
- 
--            if (!lbh.manualWrap && lbh.spaceData.textWidth > line.width) {
--                lbh.spaceData.textWidth = line.width; // ignore spaces that fall out of the line.
++
++            lbh.saveCurrentGlyph();
+         } else {
+-            if (!lbh.manualWrap && lbh.spaceData.textWidth > line.width)
 +            if (!lbh.manualWrap && lbh.checkFullOtherwiseExtend(line)) {
 +                lbh.spaceData.textWidth = 0;
 +                lbh.spaceData.length = 0;
                  goto found;
-             }
-+            lbh.saveCurrentGlyph();
-         } else {
++            }
+
              lbh.whiteSpaceOrObject = false;
              bool sb_or_ws = false;
 +            bool canBreak = false;
