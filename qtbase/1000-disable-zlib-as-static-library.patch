@@ -1,28 +1,31 @@
-From 1ad123d517eb6b005f2aac11b5da03b85ebb63d8 Mon Sep 17 00:00:00 2001
+From a320e3c5146d6a1fd3ff08348b86449c0fbc2c0f Mon Sep 17 00:00:00 2001
 From: Michal Lazo <michal.lazo@memsource.com>
-Date: Wed, 26 Oct 2022 20:47:56 +0200
+Date: Wed, 7 Jun 2023 11:23:56 +0200
 Subject: [PATCH] disable zlib as static library
 
+Change-Id: Id1d3da2e2faa615611f3ea545c4379770b69d122
 ---
- cmake/FindWrapSystemZLIB.cmake   | 29 --------------------
- cmake/FindWrapZLIB.cmake         | 40 ++++++++++++++++++++--------
+ cmake/FindWrapSystemZLIB.cmake   | 32 ---------------------
+ cmake/FindWrapZLIB.cmake         | 40 +++++++++++++++++++-------
  configure.cmake                  |  5 ++--
- src/3rdparty/zlib/CMakeLists.txt | 45 --------------------------------
- src/3rdparty/zlib/qtpatches.diff | 27 ++++++++++++++-----
- src/3rdparty/zlib/src/gzguts.h   | 15 ++++++++++-
+ src/3rdparty/zlib/CMakeLists.txt | 49 --------------------------------
+ src/3rdparty/zlib/src/gzguts.h   | 15 +++++++++-
  src/3rdparty/zlib/src/zutil.h    |  4 ++-
  src/CMakeLists.txt               |  5 ----
- src/corelib/CMakeLists.txt       | 35 ++++++++++++++++++++++---
- 9 files changed, 101 insertions(+), 104 deletions(-)
+ src/corelib/CMakeLists.txt       | 35 ++++++++++++++++++++---
+ 8 files changed, 80 insertions(+), 105 deletions(-)
  delete mode 100644 cmake/FindWrapSystemZLIB.cmake
  delete mode 100644 src/3rdparty/zlib/CMakeLists.txt
 
 diff --git a/cmake/FindWrapSystemZLIB.cmake b/cmake/FindWrapSystemZLIB.cmake
 deleted file mode 100644
-index c109a598be..0000000000
+index 5db43db626..0000000000
 --- a/cmake/FindWrapSystemZLIB.cmake
 +++ /dev/null
-@@ -1,29 +0,0 @@
+@@ -1,32 +0,0 @@
+-# Copyright (C) 2022 The Qt Company Ltd.
+-# SPDX-License-Identifier: BSD-3-Clause
+-
 -# We can't create the same interface imported target multiple times, CMake will complain if we do
 -# that. This can happen if the find_package call is done in multiple different subdirectories.
 -if(TARGET WrapSystemZLIB::WrapSystemZLIB)
@@ -53,10 +56,13 @@ index c109a598be..0000000000
 -include(FindPackageHandleStandardArgs)
 -find_package_handle_standard_args(WrapSystemZLIB DEFAULT_MSG WrapSystemZLIB_FOUND)
 diff --git a/cmake/FindWrapZLIB.cmake b/cmake/FindWrapZLIB.cmake
-index ecb0070f81..585dc5e95e 100644
+index 6cf60fab9f..323b6052c7 100644
 --- a/cmake/FindWrapZLIB.cmake
 +++ b/cmake/FindWrapZLIB.cmake
-@@ -1,11 +1,29 @@
+@@ -1,14 +1,32 @@
+ # Copyright (C) 2022 The Qt Company Ltd.
+ # SPDX-License-Identifier: BSD-3-Clause
+ 
 -include(QtFindWrapHelper NO_POLICY_SCOPE)
 -
 -qt_find_package_system_or_bundled(wrap_zlib
@@ -98,10 +104,10 @@ index ecb0070f81..585dc5e95e 100644
 +include(FindPackageHandleStandardArgs)
 +find_package_handle_standard_args(WrapZLIB DEFAULT_MSG WrapZLIB_FOUND)
 diff --git a/configure.cmake b/configure.cmake
-index 0896125703..8178e46434 100644
+index 07a0b1836d..3bc803b191 100644
 --- a/configure.cmake
 +++ b/configure.cmake
-@@ -4,7 +4,8 @@
+@@ -7,7 +7,8 @@
  
  #### Libraries
  
@@ -111,7 +117,7 @@ index 0896125703..8178e46434 100644
  # Work around global target promotion failure when WrapZLIB is used on APPLE platforms.
  # What ends up happening is that the ZLIB::ZLIB target is not promoted to global by qt_find_package,
  # then qt_find_package(WrapSystemPNG) tries to find its dependency ZLIB::ZLIB, sees it's not global
-@@ -910,7 +911,7 @@ qt_feature("stack-protector-strong" PRIVATE
+@@ -969,7 +970,7 @@ qt_feature("stack-protector-strong" PRIVATE
  )
  qt_feature("system-zlib" PRIVATE
      LABEL "Using system zlib"
@@ -122,10 +128,10 @@ index 0896125703..8178e46434 100644
      LABEL "Zstandard support"
 diff --git a/src/3rdparty/zlib/CMakeLists.txt b/src/3rdparty/zlib/CMakeLists.txt
 deleted file mode 100644
-index 701dab7dd3..0000000000
+index 81fc649538..0000000000
 --- a/src/3rdparty/zlib/CMakeLists.txt
 +++ /dev/null
-@@ -1,45 +0,0 @@
+@@ -1,49 +0,0 @@
 -qt_internal_add_3rdparty_library(BundledZLIB
 -    STATIC
 -    SKIP_AUTOMOC
@@ -162,6 +168,10 @@ index 701dab7dd3..0000000000
 -        $<TARGET_PROPERTY:Core,INCLUDE_DIRECTORIES>
 -)
 -
+-set_target_properties(BundledZLIB PROPERTIES UNITY_BUILD OFF)
+-
+-qt_internal_add_sync_header_dependencies(BundledZLIB Core)
+-
 -qt_disable_warnings(BundledZLIB)
 -
 -qt_set_symbol_visibility_hidden(BundledZLIB)
@@ -171,71 +181,6 @@ index 701dab7dd3..0000000000
 -        src/zlib.h
 -        src/zconf.h
 -)
-diff --git a/src/3rdparty/zlib/qtpatches.diff b/src/3rdparty/zlib/qtpatches.diff
-index e4e212dda5..b7d150b8fd 100644
---- a/src/3rdparty/zlib/qtpatches.diff
-+++ b/src/3rdparty/zlib/qtpatches.diff
-@@ -15,11 +15,24 @@ diff -ruN orig/ChangeLog src/ChangeLog
- diff -ruN orig/gzguts.h src/gzguts.h
- --- orig/gzguts.h
- +++ src/gzguts.h
--@@ -3,6 +3,12 @@
-+@@ -3,6 +3,25 @@
-   * For conditions of distribution and use, see copyright notice in zlib.h
-   */
-  
--+#include <qconfig.h>
-++#ifdef _MSC_VER
-++#  ifndef _CRT_SECURE_NO_DEPRECATE
-++#    define _CRT_SECURE_NO_DEPRECATE
-++#  endif
-++#  ifndef _CRT_NONSTDC_NO_DEPRECATE
-++#    define _CRT_NONSTDC_NO_DEPRECATE
-++#  endif
-++// disable warnings like '=': conversion from 'size_t' to 'unsigned int', possible loss of data
-++#  pragma warning(disable: 4267; disable: 4244)
-++#endif
-++
-++#ifndef QT_BOOTSTRAPPED
-++#  include <qconfig.h>
-++#endif
- +
- +#ifdef QT_VISIBILITY_AVAILABLE
- +#define HAVE_HIDDEN
-@@ -104,11 +117,13 @@ diff -ruN orig/zlib.h src/zlib.h
- diff -ruN orig/zutil.h src/zutil.h
- --- orig/zutil.h
- +++ src/zutil.h
--@@ -13,6 +13,12 @@
-+@@ -13,6 +13,14 @@
-  #ifndef ZUTIL_H
-  #define ZUTIL_H
-  
--+#include <qconfig.h>
-++#ifndef QT_BOOTSTRAPPED
-++#  include <qconfig.h>
-++#endif
- +
- +#ifdef QT_VISIBILITY_AVAILABLE
- +#define HAVE_HIDDEN
-@@ -117,7 +132,7 @@ diff -ruN orig/zutil.h src/zutil.h
-  #ifdef HAVE_HIDDEN
-  #  define ZLIB_INTERNAL __attribute__((visibility ("hidden")))
-  #else
--@@ -143,6 +149,11 @@
-+@@ -143,6 +151,11 @@
-  #    if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
-  #      include <unix.h> /* for fdopen */
-  #    else
-@@ -129,7 +144,7 @@ diff -ruN orig/zutil.h src/zutil.h
-  #      ifndef fdopen
-  #        define fdopen(fd,mode) NULL /* No fdopen() */
-  #      endif
--@@ -166,7 +177,7 @@
-+@@ -166,7 +179,7 @@
-  #  define OS_CODE 18
-  #endif
-  
 diff --git a/src/3rdparty/zlib/src/gzguts.h b/src/3rdparty/zlib/src/gzguts.h
 index 26d2ac9bd0..3ec32af25f 100644
 --- a/src/3rdparty/zlib/src/gzguts.h
@@ -263,7 +208,7 @@ index 26d2ac9bd0..3ec32af25f 100644
  #ifdef QT_VISIBILITY_AVAILABLE
  #define HAVE_HIDDEN
 diff --git a/src/3rdparty/zlib/src/zutil.h b/src/3rdparty/zlib/src/zutil.h
-index c535e57eb6..0d78483358 100644
+index 29c690eea0..14aba921b0 100644
 --- a/src/3rdparty/zlib/src/zutil.h
 +++ b/src/3rdparty/zlib/src/zutil.h
 @@ -13,7 +13,9 @@
@@ -278,10 +223,10 @@ index c535e57eb6..0d78483358 100644
  #ifdef QT_VISIBILITY_AVAILABLE
  #define HAVE_HIDDEN
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 0e10078bf4..77cdbc4bd9 100644
+index 3fd80a259d..e489abb25f 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -33,11 +33,6 @@ if(QT_FEATURE_regularexpression AND NOT QT_FEATURE_system_pcre2)
+@@ -37,11 +37,6 @@ if(QT_FEATURE_regularexpression AND NOT QT_FEATURE_system_pcre2)
  endif()
  qt_install_3rdparty_library_wrap_config_extra_file(BundledPcre2)
  
@@ -291,40 +236,40 @@ index 0e10078bf4..77cdbc4bd9 100644
 -qt_install_3rdparty_library_wrap_config_extra_file(BundledZLIB)
 -
  add_subdirectory(corelib)
- 
- # Needs to be after corelib, because some of them reference Core.
+ if (QT_FEATURE_ctf AND QT_FEATURE_library)
+     add_subdirectory(corelib/tracing)
 diff --git a/src/corelib/CMakeLists.txt b/src/corelib/CMakeLists.txt
-index c683bb46dd..8844ffc593 100644
+index 1a8cc08de5..5ff1f0ebff 100644
 --- a/src/corelib/CMakeLists.txt
 +++ b/src/corelib/CMakeLists.txt
 @@ -3,7 +3,6 @@
- # special case begin
+ 
  qt_find_package(Threads PROVIDED_TARGETS Threads::Threads)
  qt_find_package(WrapPCRE2 PROVIDED_TARGETS WrapPCRE2::WrapPCRE2)
 -qt_find_package(WrapZLIB PROVIDED_TARGETS WrapZLIB::WrapZLIB)
  
  
  # compute the reverse relative path from QtCoreConfigExtras to the install prefix
-@@ -282,7 +281,6 @@ qt_internal_add_module(Core
+@@ -314,7 +313,6 @@ qt_internal_add_module(Core
          ../3rdparty/tinycbor/src
      LIBRARIES
-         Qt::GlobalConfigPrivate # special case
+         Qt::GlobalConfigPrivate
 -        WrapZLIB::WrapZLIB
      PRECOMPILED_HEADER
          "global/qt_pch.h"
      GENERATE_CPP_EXPORTS
-@@ -692,9 +690,30 @@ qt_internal_extend_target(Core CONDITION QT_FEATURE_std_atomic64
+@@ -673,9 +671,30 @@ qt_internal_extend_target(Core CONDITION QT_FEATURE_std_atomic64
          WrapAtomic::WrapAtomic
  )
  
--qt_internal_extend_target(Core CONDITION NOT QT_FEATURE_system_zlib
 +qt_internal_extend_target(Core CONDITION QT_FEATURE_system_zlib
-     LIBRARIES
--        Qt::ZlibPrivate
++     LIBRARIES
 +        WrapZLIB::WrapZLIB
 +)
 +
-+qt_internal_extend_target(Core CONDITION NOT QT_FEATURE_system_zlib
+ qt_internal_extend_target(Core CONDITION NOT QT_FEATURE_system_zlib
+-    LIBRARIES
+-        Qt::ZlibPrivate
 +    SOURCES
 +        ../3rdparty/zlib/src/adler32.c
 +        ../3rdparty/zlib/src/compress.c
@@ -346,7 +291,7 @@ index c683bb46dd..8844ffc593 100644
  )
  
  qt_internal_extend_target(Core CONDITION QT_FEATURE_commandlineparser
-@@ -1332,6 +1351,14 @@ qt_internal_add_docs(Core
+@@ -1344,6 +1363,14 @@ qt_internal_add_docs(Core
      doc/qtcore.qdocconf
  )
  
