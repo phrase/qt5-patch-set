@@ -22,7 +22,6 @@ apply_patch 0106-fix-for-QTBUG-69288.patch
 apply_patch 0109-missing-trailingSpaces-in-QTextLineItemIterator.patch
 apply_patch 0110-fix-Ctrl-Tab-on-osx.patch
 apply_patch 0112-process-carriage-return-similar-to-new-line.patch
-apply_patch 0114-revert-changes-from-QTBUG-83135-TP-46633.patch
 apply_patch 0115-always-escape-whitespace-characters-to-keep-newlines.patch
 
 apply_patch 0200-draw-text-misspelling-our-way.patch
