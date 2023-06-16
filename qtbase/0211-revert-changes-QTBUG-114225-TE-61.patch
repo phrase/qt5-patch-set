@@ -1,0 +1,326 @@
+From 2fb66a6aa763f12383286dff65e0538d235894ce Mon Sep 17 00:00:00 2001
+From: Michal Lazo <michal.lazo@memsource.com>
+Date: Wed, 7 Jun 2023 09:39:27 +0200
+Subject: [PATCH] QTBUG-114225 TE-61 revert changes by commit 33c88f86b5b8714977719a8ccff0f7c15c9cbd44
+ https://code.qt.io/cgit/qt/qtbase.git/commit/?id=33c88f86b5b8714977719a8ccff0f7c15c9cbd44
+
+Change-Id: I880cac55c08faca9d9d118dc8f4d36e3897031b8
+---
+ .../itemmodels/qabstractproxymodel.cpp        |  85 +-----------
+ src/corelib/itemmodels/qabstractproxymodel.h  |   6 -
+ .../itemmodels/qabstractproxymodel_p.h        |  13 +-
+ .../tst_qabstractproxymodel.cpp               | 128 ------------------
+ 4 files changed, 7 insertions(+), 225 deletions(-)
+
+diff --git a/src/corelib/itemmodels/qabstractproxymodel.cpp b/src/corelib/itemmodels/qabstractproxymodel.cpp
+index 023587e39a..63f807c2e8 100644
+--- a/src/corelib/itemmodels/qabstractproxymodel.cpp
++++ b/src/corelib/itemmodels/qabstractproxymodel.cpp
+@@ -55,69 +55,6 @@ void QAbstractProxyModelPrivate::_q_sourceModelDestroyed()
+     model = QAbstractItemModelPrivate::staticEmptyModel();
+ }
+ 
+-void QAbstractProxyModelPrivate::_q_sourceModelRowsAboutToBeInserted(const QModelIndex &parent, int, int)
+-{
+-    if (parent.isValid())
+-        return;
+-    sourceHadZeroRows = model->rowCount() == 0;
+-}
+-
+-void QAbstractProxyModelPrivate::_q_sourceModelRowsInserted(const QModelIndex &parent, int, int)
+-{
+-    if (parent.isValid())
+-        return;
+-    if (sourceHadZeroRows) {
+-        Q_Q(QAbstractProxyModel);
+-        const int columnCount = q->columnCount();
+-        if (columnCount > 0)
+-            emit q->headerDataChanged(Qt::Horizontal, 0, columnCount - 1);
+-    }
+-}
+-
+-
+-void QAbstractProxyModelPrivate::_q_sourceModelRowsRemoved(const QModelIndex &parent, int, int)
+-{
+-    if (parent.isValid())
+-        return;
+-    if (model->rowCount() == 0) {
+-        Q_Q(QAbstractProxyModel);
+-        const int columnCount = q->columnCount();
+-        if (columnCount > 0)
+-            emit q->headerDataChanged(Qt::Horizontal, 0, columnCount - 1);
+-    }
+-}
+-
+-void QAbstractProxyModelPrivate::_q_sourceModelColumnsAboutToBeInserted(const QModelIndex &parent, int, int)
+-{
+-    if (parent.isValid())
+-        return;
+-    sourceHadZeroColumns = model->columnCount() == 0;
+-}
+-
+-void QAbstractProxyModelPrivate::_q_sourceModelColumnsInserted(const QModelIndex &parent, int, int)
+-{
+-    if (parent.isValid())
+-        return;
+-    if (sourceHadZeroColumns) {
+-        Q_Q(QAbstractProxyModel);
+-        const int rowCount = q->rowCount();
+-        if (rowCount > 0)
+-            emit q->headerDataChanged(Qt::Vertical, 0, rowCount - 1);
+-    }
+-}
+-
+-void QAbstractProxyModelPrivate::_q_sourceModelColumnsRemoved(const QModelIndex &parent, int, int)
+-{
+-    if (parent.isValid())
+-        return;
+-    if (model->columnCount() == 0) {
+-        Q_Q(QAbstractProxyModel);
+-        const int rowCount = q->rowCount();
+-        if (rowCount > 0)
+-            emit q->headerDataChanged(Qt::Vertical, 0, rowCount - 1);
+-    }
+-}
+-
+ /*!
+     Constructs a proxy model with the given \a parent.
+ */
+@@ -165,13 +102,7 @@ void QAbstractProxyModel::setSourceModel(QAbstractItemModel *sourceModel)
+         const char *signalName;
+         const char *slotName;
+     } connectionTable[] = {
+-        { SIGNAL(destroyed()), SLOT(_q_sourceModelDestroyed()) },
+-        { SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)), SLOT(_q_sourceModelRowsAboutToBeInserted(QModelIndex, int, int)) },
+-        { SIGNAL(rowsInserted(QModelIndex, int, int)), SLOT(_q_sourceModelRowsInserted(QModelIndex, int, int)) },
+-        { SIGNAL(rowsRemoved(QModelIndex, int, int)), SLOT(_q_sourceModelRowsRemoved(QModelIndex, int, int)) },
+-        { SIGNAL(columnsAboutToBeInserted(QModelIndex, int, int)), SLOT(_q_sourceModelColumnsAboutToBeInserted(QModelIndex, int, int)) },
+-        { SIGNAL(columnsInserted(QModelIndex, int, int)), SLOT(_q_sourceModelColumnsInserted(QModelIndex, int, int)) },
+-        { SIGNAL(columnsRemoved(QModelIndex, int, int)), SLOT(_q_sourceModelColumnsRemoved(QModelIndex, int, int)) }
++        { SIGNAL(destroyed()), SLOT(_q_sourceModelDestroyed()) }
+     };
+ 
+     if (sourceModel != d->model) {
+@@ -296,17 +227,13 @@ QVariant QAbstractProxyModel::data(const QModelIndex &proxyIndex, int role) cons
+ QVariant QAbstractProxyModel::headerData(int section, Qt::Orientation orientation, int role) const
+ {
+     Q_D(const QAbstractProxyModel);
+-    int sourceSection = section;
++    int sourceSection;
+     if (orientation == Qt::Horizontal) {
+-        if (rowCount() > 0) {
+-            const QModelIndex proxyIndex = index(0, section);
+-            sourceSection = mapToSource(proxyIndex).column();
+-        }
++        const QModelIndex proxyIndex = index(0, section);
++        sourceSection = mapToSource(proxyIndex).column();
+     } else {
+-        if (columnCount() > 0) {
+-            const QModelIndex proxyIndex = index(section, 0);
+-            sourceSection = mapToSource(proxyIndex).row();
+-        }
++        const QModelIndex proxyIndex = index(section, 0);
++        sourceSection = mapToSource(proxyIndex).row();
+     }
+     return d->model->headerData(sourceSection, orientation, role);
+ }
+diff --git a/src/corelib/itemmodels/qabstractproxymodel.h b/src/corelib/itemmodels/qabstractproxymodel.h
+index 8652f500df..3b714b7e8d 100644
+--- a/src/corelib/itemmodels/qabstractproxymodel.h
++++ b/src/corelib/itemmodels/qabstractproxymodel.h
+@@ -75,12 +75,6 @@ private:
+     Q_DECLARE_PRIVATE(QAbstractProxyModel)
+     Q_DISABLE_COPY(QAbstractProxyModel)
+     Q_PRIVATE_SLOT(d_func(), void _q_sourceModelDestroyed())
+-    Q_PRIVATE_SLOT(d_func(), void _q_sourceModelRowsAboutToBeInserted(QModelIndex, int, int))
+-    Q_PRIVATE_SLOT(d_func(), void _q_sourceModelRowsInserted(QModelIndex, int, int))
+-    Q_PRIVATE_SLOT(d_func(), void _q_sourceModelRowsRemoved(QModelIndex, int, int))
+-    Q_PRIVATE_SLOT(d_func(), void _q_sourceModelColumnsAboutToBeInserted(QModelIndex, int, int))
+-    Q_PRIVATE_SLOT(d_func(), void _q_sourceModelColumnsInserted(QModelIndex, int, int))
+-    Q_PRIVATE_SLOT(d_func(), void _q_sourceModelColumnsRemoved(QModelIndex, int, int))
+ };
+ 
+ QT_END_NAMESPACE
+diff --git a/src/corelib/itemmodels/qabstractproxymodel_p.h b/src/corelib/itemmodels/qabstractproxymodel_p.h
+index 678ec4804f..b97d975e6a 100644
+--- a/src/corelib/itemmodels/qabstractproxymodel_p.h
++++ b/src/corelib/itemmodels/qabstractproxymodel_p.h
+@@ -28,9 +28,7 @@ class Q_CORE_EXPORT QAbstractProxyModelPrivate : public QAbstractItemModelPrivat
+     Q_DECLARE_PUBLIC(QAbstractProxyModel)
+ public:
+     QAbstractProxyModelPrivate()
+-        : QAbstractItemModelPrivate(),
+-        sourceHadZeroRows(false),
+-        sourceHadZeroColumns(false)
++        : QAbstractItemModelPrivate()
+     {}
+     void setModelForwarder(QAbstractItemModel *sourceModel)
+     {
+@@ -47,18 +45,9 @@ public:
+                                        &QAbstractProxyModelPrivate::modelChangedForwarder,
+                                        &QAbstractProxyModelPrivate::getModelForwarder, nullptr)
+     virtual void _q_sourceModelDestroyed();
+-    void _q_sourceModelRowsAboutToBeInserted(const QModelIndex &parent, int first, int last);
+-    void _q_sourceModelRowsInserted(const QModelIndex &parent, int first, int last);
+-    void _q_sourceModelRowsRemoved(const QModelIndex &parent, int first, int last);
+-    void _q_sourceModelColumnsAboutToBeInserted(const QModelIndex &parent, int first, int last);
+-    void _q_sourceModelColumnsInserted(const QModelIndex &parent, int first, int last);
+-    void _q_sourceModelColumnsRemoved(const QModelIndex &parent, int first, int last);
+ 
+     void mapDropCoordinatesToSource(int row, int column, const QModelIndex &parent,
+                                     int *source_row, int *source_column, QModelIndex *source_parent) const;
+-
+-    unsigned int sourceHadZeroRows : 1;
+-    unsigned int sourceHadZeroColumns : 1;
+ };
+ 
+ QT_END_NAMESPACE
+diff --git a/tests/auto/corelib/itemmodels/qabstractproxymodel/tst_qabstractproxymodel.cpp b/tests/auto/corelib/itemmodels/qabstractproxymodel/tst_qabstractproxymodel.cpp
+index 3bea468e5b..4b8c248114 100644
+--- a/tests/auto/corelib/itemmodels/qabstractproxymodel/tst_qabstractproxymodel.cpp
++++ b/tests/auto/corelib/itemmodels/qabstractproxymodel/tst_qabstractproxymodel.cpp
+@@ -19,7 +19,6 @@ private slots:
+     void flags();
+     void headerData_data();
+     void headerData();
+-    void headerDataInBounds();
+     void itemData_data();
+     void itemData();
+     void mapFromSource_data();
+@@ -150,133 +149,6 @@ void tst_QAbstractProxyModel::headerData()
+     QCOMPARE(model.headerData(section, orientation, role), headerData);
+ }
+ 
+-class SimpleTableReverseColumnsProxy : public QAbstractProxyModel
+-{
+-public:
+-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override
+-    {
+-        if (parent.isValid())
+-            return {};
+-
+-        if (row < 0 || row >= rowCount() || column < 0 || column >= columnCount())
+-            qFatal("error"); // cannot QFAIL here
+-
+-        return createIndex(row, column);
+-    }
+-
+-    int rowCount(const QModelIndex &parent = QModelIndex()) const override
+-    {
+-        if (parent.isValid())
+-            return 0;
+-        return sourceModel()->rowCount();
+-    }
+-
+-    int columnCount(const QModelIndex &parent = QModelIndex()) const override
+-    {
+-        if (parent.isValid())
+-            return 0;
+-        return sourceModel()->columnCount();
+-    }
+-
+-    QModelIndex parent(const QModelIndex &) const override
+-    {
+-        return QModelIndex();
+-    }
+-
+-    QModelIndex mapToSource(const QModelIndex &idx) const override
+-    {
+-        if (!idx.isValid())
+-            return QModelIndex();
+-        return sourceModel()->index(idx.row(), columnCount() - 1 - idx.column());
+-    }
+-
+-    QModelIndex mapFromSource(const QModelIndex &idx) const override
+-    {
+-       if (idx.parent().isValid())
+-           return QModelIndex();
+-       return createIndex(idx.row(), columnCount() - 1 - idx.column());
+-    }
+-};
+-
+-void tst_QAbstractProxyModel::headerDataInBounds()
+-{
+-    QStandardItemModel qsim(0, 5);
+-    qsim.setHorizontalHeaderLabels({"Col1", "Col2", "Col3", "Col4", "Col5"});
+-
+-    SimpleTableReverseColumnsProxy proxy;
+-    QSignalSpy headerDataChangedSpy(&proxy, &QAbstractItemModel::headerDataChanged);
+-    QVERIFY(headerDataChangedSpy.isValid());
+-    proxy.setSourceModel(&qsim);
+-    QCOMPARE(proxy.rowCount(), 0);
+-    QCOMPARE(proxy.columnCount(), 5);
+-
+-    for (int i = 0; i < proxy.columnCount(); ++i) {
+-        QString expected = QString("Col%1").arg(i + 1);
+-        QCOMPARE(proxy.headerData(i, Qt::Horizontal).toString(), expected);
+-    }
+-
+-    qsim.appendRow({
+-                       new QStandardItem("A"),
+-                       new QStandardItem("B"),
+-                       new QStandardItem("C"),
+-                       new QStandardItem("D"),
+-                       new QStandardItem("E")
+-                   });
+-
+-    QCOMPARE(proxy.rowCount(), 1);
+-    QCOMPARE(proxy.columnCount(), 5);
+-    QCOMPARE(headerDataChangedSpy.size(), 1);
+-    QCOMPARE(headerDataChangedSpy[0][0].value<Qt::Orientation>(), Qt::Horizontal);
+-    QCOMPARE(headerDataChangedSpy[0][1].value<int>(), 0);
+-    QCOMPARE(headerDataChangedSpy[0][2].value<int>(), 4);
+-
+-    for (int i = 0; i < proxy.columnCount(); ++i) {
+-        QString expected = QString("Col%1").arg(proxy.columnCount() - i);
+-        QCOMPARE(proxy.headerData(i, Qt::Horizontal).toString(), expected);
+-    }
+-
+-    qsim.appendRow({
+-                       new QStandardItem("A"),
+-                       new QStandardItem("B"),
+-                       new QStandardItem("C"),
+-                       new QStandardItem("D"),
+-                       new QStandardItem("E")
+-                   });
+-    QCOMPARE(proxy.rowCount(), 2);
+-    QCOMPARE(proxy.columnCount(), 5);
+-    QCOMPARE(headerDataChangedSpy.size(), 1);
+-
+-    for (int i = 0; i < proxy.columnCount(); ++i) {
+-        QString expected = QString("Col%1").arg(proxy.columnCount() - i);
+-        QCOMPARE(proxy.headerData(i, Qt::Horizontal).toString(), expected);
+-    }
+-
+-    QVERIFY(qsim.removeRows(0, 1));
+-
+-    QCOMPARE(proxy.rowCount(), 1);
+-    QCOMPARE(proxy.columnCount(), 5);
+-    QCOMPARE(headerDataChangedSpy.size(), 1);
+-
+-    for (int i = 0; i < proxy.columnCount(); ++i) {
+-        QString expected = QString("Col%1").arg(proxy.columnCount() - i);
+-        QCOMPARE(proxy.headerData(i, Qt::Horizontal).toString(), expected);
+-    }
+-
+-    QVERIFY(qsim.removeRows(0, 1));
+-
+-    QCOMPARE(proxy.rowCount(), 0);
+-    QCOMPARE(proxy.columnCount(), 5);
+-    QCOMPARE(headerDataChangedSpy.size(), 2);
+-    QCOMPARE(headerDataChangedSpy[1][0].value<Qt::Orientation>(), Qt::Horizontal);
+-    QCOMPARE(headerDataChangedSpy[1][1].value<int>(), 0);
+-    QCOMPARE(headerDataChangedSpy[1][2].value<int>(), 4);
+-
+-    for (int i = 0; i < proxy.columnCount(); ++i) {
+-        QString expected = QString("Col%1").arg(i + 1);
+-        QCOMPARE(proxy.headerData(i, Qt::Horizontal).toString(), expected);
+-    }
+-}
+-
+ void tst_QAbstractProxyModel::itemData_data()
+ {
+     QTest::addColumn<QModelIndex>("index");
+-- 
+2.26.1.windows.1
+

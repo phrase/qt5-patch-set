@@ -36,6 +36,7 @@ apply_patch 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 apply_patch 0208-add-white-space-color.patch
 apply_patch 0209_preferences.patch
 apply_patch 0210_disable_autodetect_menurole.patch
+apply_patch 0211-revert-changes-QTBUG-114225-TE-61.patch
 cd ..
 
 cd qtquickcontrols
