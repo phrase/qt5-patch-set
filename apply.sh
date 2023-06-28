@@ -41,4 +41,5 @@ cd ..
 
 cd qtquickcontrols
 apply_patch 0002-qt-6.3.0.patch
+apply_patch 0003-innovate-code.patch
 cd ..
