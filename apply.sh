@@ -43,4 +43,5 @@ cd qtquickcontrols
 apply_patch 0002-qt-6.3.0.patch
 apply_patch 0003-innovate-code.patch
 apply_patch 0004-set-ListView-width-to-1-after-change-in-QTBUG-110625.patch
+apply_patch 0005-dont-allow-less-then-0-max-min-value.patch
 cd ..
