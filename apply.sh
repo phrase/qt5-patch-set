@@ -5,6 +5,7 @@ set -e
 cd ${MEMSOURCE_LIB}/qt5
 
 cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtbase .
+cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qttools .
 cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtquickcontrols .
 
 apply_patch() {
