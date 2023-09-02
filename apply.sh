@@ -39,6 +39,10 @@ apply_patch 0211-revert-changes-QTBUG-114225-TE-61.patch
 apply_patch 0300-revert-QTBUG-110134.patch
 cd ..
 
+cd qttools
+apply_patch 0001-disable-linguist-tool.patch
+cd ..
+
 cd qtquickcontrols
 apply_patch 0002-qt-6.3.0.patch
 apply_patch 0003-innovate-code.patch
