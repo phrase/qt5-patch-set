@@ -27,7 +27,6 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0208-add-white-space-color.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0209_preferences.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0210_disable_autodetect_menurole.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0211-revert-changes-QTBUG-114225-TE-61.patch
 
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0300-revert-QTBUG-110134.patch
 cd ..
