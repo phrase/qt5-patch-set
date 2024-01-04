@@ -1,7 +1,6 @@
 cd %MEMSOURCE_LIB%\qt5
 
 xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase qtbase /S/Y
-xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtquickcontrols qtquickcontrols /S/Y
 
 
 cd qtbase
@@ -29,12 +28,4 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0210_disable_autodetect_menurole.patch
 
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0300-revert-QTBUG-110134.patch
-cd ..
-
-cd qtquickcontrols
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0001-9859-TabViewStyle-changes.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0002-qt-6.3.0.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0003-innovate-code.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0004-set-ListView-width-to-1-after-change-in-QTBUG-110625.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0005-dont-allow-less-then-0-max-min-value.patch
 cd ..
