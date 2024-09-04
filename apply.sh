@@ -34,6 +34,7 @@ apply_patch 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
 apply_patch 0208-add-white-space-color.patch
 apply_patch 0209_preferences.patch
 apply_patch 0210_disable_autodetect_menurole.patch
+apply_patch 0211-storing-block-separator-to-QTextBlockFormat.patch
 
 apply_patch 0300-revert-QTBUG-110134.patch
 cd ..

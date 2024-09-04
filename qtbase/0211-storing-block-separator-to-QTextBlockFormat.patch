@@ -1,0 +1,43 @@
+From 47746a181224a970ec53ce212ae9b4474948cd3a Mon Sep 17 00:00:00 2001
+From: Vladimir Kraus <vladimir.kraus@gmail.com>
+Date: Tue, 3 Sep 2024 21:11:50 +0200
+Subject: [PATCH] storing block separator to QTextBlockFormat
+
+Change-Id: Ib350921b8011ab3ad9ced8547787935d4d99e3c1
+---
+ src/gui/text/qtextcursor.cpp | 6 ++++++
+ src/gui/text/qtextformat.h   | 1 +
+ 2 files changed, 7 insertions(+)
+
+diff --git a/src/gui/text/qtextcursor.cpp b/src/gui/text/qtextcursor.cpp
+index c23bcf0317..8c57b5bee5 100644
+--- a/src/gui/text/qtextcursor.cpp
++++ b/src/gui/text/qtextcursor.cpp
+@@ -1454,6 +1454,12 @@ void QTextCursor::insertText(const QString &text, const QTextCharFormat &_format
+                 if (blockEnd > blockStart)
+                     d->priv->insert(d->position, textStart + blockStart, blockEnd - blockStart, formatIdx);
+ 
++                QString blockSeparator = ch;
++                if (ch == u'\n' && i > 0 && text.at(i - 1) == u'\r') {
++                    blockSeparator = QStringLiteral("\r\n");
++                }
++                blockFmt.setProperty(QTextFormat::BlockSeparator, blockSeparator);
++
+                 d->insertBlock(blockFmt, format);
+                 blockStart = i + 1;
+             }
+diff --git a/src/gui/text/qtextformat.h b/src/gui/text/qtextformat.h
+index 02c66279e2..82f0754d2d 100644
+--- a/src/gui/text/qtextformat.h
++++ b/src/gui/text/qtextformat.h
+@@ -107,6 +107,7 @@ public:
+         // paragraph and char
+         CssFloat = 0x0800,
+         LayoutDirection = 0x0801,
++        BlockSeparator = 0x0802,
+ 
+         OutlinePen = 0x810,
+         BackgroundBrush = 0x820,
+-- 
+2.45.1.windows.1
+
