@@ -5,7 +5,6 @@ set -e
 cd ${MEMSOURCE_LIB}/qt5
 
 cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qtbase .
-cp -rv ${MEMSOURCE_LIB}/qt5-patch-set/qttools .
 
 apply_patch() {
   echo "\nApplying $1"
@@ -37,8 +36,4 @@ apply_patch 0210_disable_autodetect_menurole.patch
 apply_patch 0211-storing-block-separator-to-QTextBlockFormat.patch
 
 apply_patch 0300-revert-QTBUG-110134.patch
-cd ..
-
-cd qttools
-apply_patch 0001-disable-linguist-tool.patch
 cd ..

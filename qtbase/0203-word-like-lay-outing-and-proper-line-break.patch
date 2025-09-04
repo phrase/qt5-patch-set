@@ -51,7 +51,7 @@ index dfcbf6a786..ece07a7576 100644
 -            if (currentPosition <= 0)
 +            if (currentPosition <= 0 || glyphs.numGlyphs == 0 || logClusters[currentPosition-1] >= glyphs.numGlyphs)
                  return;
-             calculateRightBearing(fontEngine, currentGlyph());
+             calculateRightBearing(fontEngine.data(), currentGlyph());
          }
 @@ -1834,6 +1834,9 @@ void QTextLine::layout_helper(int maxGlyphs)
      bool hasInlineObject = false;
@@ -215,7 +215,7 @@ index 2955fe8dcc..25a9352308 100644
          SuppressColors = 0x8,
          ShowDocumentTerminator = 0x10,
 +        WordLikeLayout = 0x20,
-         IncludeTrailingSpaces = 0x80000000
+         IncludeTrailingSpaces = 0x80000000,
      };
      Q_DECLARE_FLAGS(Flags, Flag)
 -- 
