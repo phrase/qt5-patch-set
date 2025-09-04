@@ -54,17 +54,17 @@ index 5085227723..0f8e27c2a5 100644
 --- a/src/gui/text/qtextlayout.cpp
 +++ b/src/gui/text/qtextlayout.cpp
 @@ -2664,6 +2664,11 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
-                     p->drawText(pos, visualLine);
-                     p->setPen(pen);
+                         p->drawText(pos, visualLine);
+                         p->setPen(pen);
+                     }
++                } else if ((eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators) &&
++                    si.analysis.flags == QScriptAnalysis::BidiOperator) {
++                    p->setPen(QColor(23, 183, 255));
++                    p->drawText(pos, QChar(si.analysis.bidiLevel % 2 ? (ushort)0x21b0 : (ushort)0x21b1));
++                    p->setPen(pen);
+                 } else {
+                     QPainterPrivate::get(p)->drawTextItem(pos, gf, eng);
                  }
-+            } else if ((eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators) &&
-+                si.analysis.flags == QScriptAnalysis::BidiOperator) {
-+                p->setPen(QColor(23, 183, 255));
-+                p->drawText(pos, QChar(si.analysis.bidiLevel % 2 ? (ushort)0x21b0 : (ushort)0x21b1));
-+                p->setPen(pen);
-             } else {
-                 QPainterPrivate::get(p)->drawTextItem(pos, gf, eng);
-             }
 -- 
 2.18.0.windows.1
 

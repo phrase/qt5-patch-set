@@ -166,7 +166,7 @@ index dfcbf6a786..ece07a7576 100644
                  // into account (negative right bearing means the glyph has pixel data past the
                  // advance length). Note that the negative right bearing is an absolute number,
 @@ -2515,8 +2551,9 @@ void QTextLine::draw_internal(QPainter *p, const QPointF &pos,
-     QPen pen = p->pen();
+     const QScriptLine &line = eng->lines[index];
  
      bool noText = (selection && selection->format.property(SuppressText).toBool());
 +    bool rtl = (eng->block.document() && eng->block.document()->defaultTextOption().textDirection() == Qt::RightToLeft);
@@ -177,35 +177,35 @@ index dfcbf6a786..ece07a7576 100644
              && selection->start <= line.from
              && selection->start + selection->length > line.from) {
 @@ -2706,7 +2743,28 @@ void QTextLine::draw_internal(QPainter *p, const QPointF &pos,
-         } else {
-             if (noText)
-                 gf.glyphs.numGlyphs = 0; // slightly less elegant than it should be
--            QPainterPrivate::get(p)->drawTextItem(pos, gf, eng);
-+            if ((eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators) &&
-+                si.analysis.flags == QScriptAnalysis::LineOrParagraphSeparator) {
-+                QChar visualLine;
-+                if ((index == eng->lines.size() - 1) && (eng->block.next().isValid() != false)) { // newline
-+                    visualLine = (ushort)0xb6;
-+                    if (rtl)
-+                        pos = QPointF((line.width - line.textWidth).toReal(), y.toReal());
-+                } else if (iterator.itemStart < (eng->layoutData->string.length() - 1)) { // lineseparator
-+                    if (rtl)
-+                        pos = QPointF((line.width - line.textWidth).toReal(), y.toReal());
-+                    visualLine = ((ushort)0x21a9);
+             } else {
+                 if (noText)
+                     gf.glyphs.numGlyphs = 0; // slightly less elegant than it should be
+-                QPainterPrivate::get(p)->drawTextItem(pos, gf, eng);
++                if ((eng->option.flags() & QTextOption::ShowLineAndParagraphSeparators) &&
++                    si.analysis.flags == QScriptAnalysis::LineOrParagraphSeparator) {
++                    QChar visualLine;
++                    if ((index == eng->lines.size() - 1) && (eng->block.next().isValid() != false)) { // newline
++                        visualLine = (ushort)0xb6;
++                        if (rtl)
++                            pos = QPointF((line.width - line.textWidth).toReal(), y.toReal());
++                    } else if (iterator.itemStart < (eng->layoutData->string.length() - 1)) { // lineseparator
++                        if (rtl)
++                            pos = QPointF((line.width - line.textWidth).toReal(), y.toReal());
++                        visualLine = ((ushort)0x21a9);
++                    }
++                    if (visualLine.unicode()) {
++                        QBrush c = format.foreground();
++                        if(c.style() != Qt::NoBrush)
++                            p->setPen(c.color());
++                        p->drawText(pos, visualLine);
++                        p->setPen(pen);
++                    }
++                } else {
++                    QPainterPrivate::get(p)->drawTextItem(pos, gf, eng);
 +                }
-+                if (visualLine.unicode()) {
-+                    QBrush c = format.foreground();
-+                    if(c.style() != Qt::NoBrush)
-+                        p->setPen(c.color());
-+                    p->drawText(pos, visualLine);
-+                    p->setPen(pen);
-+                }
-+            } else {
-+                QPainterPrivate::get(p)->drawTextItem(pos, gf, eng);
-+            }
-         }
+             }
  
-         if ((si.analysis.flags == QScriptAnalysis::Space
+             if ((si.analysis.flags == QScriptAnalysis::Space
 diff --git a/src/gui/text/qtextoption.h b/src/gui/text/qtextoption.h
 index 2955fe8dcc..25a9352308 100644
 --- a/src/gui/text/qtextoption.h

@@ -32,7 +32,7 @@ index 43c22910f9..30d3d5216d 100644
 +    return QTabBar::event(e);
  }
  
- QTabBar *QMainWindowLayout::getTabBar()
+ QList<QDockWidget *> QMainWindowLayout::tabifiedDockWidgets(const QDockWidget *dockWidget) const
 -- 
 2.18.0.windows.1
 
