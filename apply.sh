@@ -26,11 +26,11 @@ apply_patch 0115-always-escape-whitespace-characters-to-keep-newlines.patch
 apply_patch 0200-draw-text-misspelling-our-way.patch
 apply_patch 0201-filter-more-date-for-completer-properly-handle-parti.patch
 apply_patch 0202-QSyntaxHighlighter-merge-char-formats.patch
-apply_patch 0203-word-like-lay-outing-and-proper-line-break.patch
-apply_patch 0204-show-LTR-and-RTL-bidi-operators.patch
+#apply_patch 0203-word-like-lay-outing-and-proper-line-break.patch
+#apply_patch 0204-show-LTR-and-RTL-bidi-operators.patch
 apply_patch 0206-preallocate-formatChanges-also-for-whole-block-lengt.patch
 apply_patch 0207-always-show-tooltip-for-QTabBar-TP-21494.patch
-apply_patch 0208-add-white-space-color.patch
+#apply_patch 0208-add-white-space-color.patch
 apply_patch 0209_preferences.patch
 apply_patch 0210_disable_autodetect_menurole.patch
 apply_patch 0211-storing-block-separator-to-QTextBlockFormat.patch
