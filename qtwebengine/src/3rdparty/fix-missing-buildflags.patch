@@ -1,0 +1,30 @@
+diff --git a/chromium/chrome/test/chromedriver/BUILD.gn b/chromium/chrome/test/chromedriver/BUILD.gn
+index 812445d934f..0580d5ef492 100644
+--- a/chromium/chrome/test/chromedriver/BUILD.gn
++++ b/chromium/chrome/test/chromedriver/BUILD.gn
+@@ -460,10 +460,13 @@ if (is_linux && !is_qtwebengine) {
+           "//content/public/common/content_switches.cc",
+           "//tools/v8_context_snapshot/qt_overrides.cc",
+         ]
++
++        deps += [ "//ui/gl:buildflags" ]
+       }
+ 
+       if (is_mac) {
+         sources += [ "//tools/v8_context_snapshot/qt_overrides.cc" ]
++        deps += [ "//ui/gl:buildflags" ]
+       }
+     }
+   }
+diff --git a/chromium/tools/v8_context_snapshot/BUILD.gn b/chromium/tools/v8_context_snapshot/BUILD.gn
+index f2ac9fc5f0d..806683fb3db 100644
+--- a/chromium/tools/v8_context_snapshot/BUILD.gn
++++ b/chromium/tools/v8_context_snapshot/BUILD.gn
+@@ -92,6 +92,7 @@ if (use_v8_context_snapshot) {
+         "//third_party/blink/public:blink",
+         "//content/public/common:static_switches",
+         "//v8",
++        "//ui/gl:buildflags",
+       ]
+ 
+       configs += [
