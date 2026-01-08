@@ -1,19 +1,8 @@
-From f116f0ad6095a1e2c90766a8248603e5bd6eb49d Mon Sep 17 00:00:00 2001
-From: Michal Lazo <michal.lazo@memsource.com>
-Date: Fri, 10 Jun 2022 09:53:28 +0200
-Subject: [PATCH] word like lay-outing and proper line-break
-
----
- src/gui/text/qtextengine.cpp | 12 +++---
- src/gui/text/qtextlayout.cpp | 80 +++++++++++++++++++++++++++++++-----
- src/gui/text/qtextoption.h   |  1 +
- 3 files changed, 76 insertions(+), 17 deletions(-)
-
 diff --git a/src/gui/text/qtextengine.cpp b/src/gui/text/qtextengine.cpp
-index ac50d5b24e..9e674f762a 100644
+index 205323a..7c82509 100644
 --- a/src/gui/text/qtextengine.cpp
 +++ b/src/gui/text/qtextengine.cpp
-@@ -1965,7 +1965,7 @@ void QTextEngine::itemize() const
+@@ -1976,7 +1976,7 @@ void QTextEngine::itemize() const
                  string = reinterpret_cast<const ushort *>(layoutData->string.unicode());
                  uc = string + offset;
                  e = string + length;
@@ -22,7 +11,7 @@ index ac50d5b24e..9e674f762a 100644
              }
              break;
          case QChar::Tabulation:
-@@ -1973,12 +1973,12 @@ void QTextEngine::itemize() const
+@@ -1984,12 +1984,12 @@ void QTextEngine::itemize() const
              analysis->bidiLevel = bidi.baseLevel;
              break;
          case QChar::Space:
@@ -41,10 +30,10 @@ index ac50d5b24e..9e674f762a 100644
              analysis->flags = QScriptAnalysis::None;
              break;
 diff --git a/src/gui/text/qtextlayout.cpp b/src/gui/text/qtextlayout.cpp
-index dfcbf6a786..ece07a7576 100644
+index dc7127c..1d877f8 100644
 --- a/src/gui/text/qtextlayout.cpp
 +++ b/src/gui/text/qtextlayout.cpp
-@@ -1706,7 +1706,7 @@ namespace {
+@@ -1733,7 +1733,7 @@ namespace {
  
          inline void calculateRightBearing()
          {
@@ -53,8 +42,8 @@ index dfcbf6a786..ece07a7576 100644
                  return;
              calculateRightBearing(fontEngine.data(), currentGlyph());
          }
-@@ -1834,6 +1834,9 @@ void QTextLine::layout_helper(int maxGlyphs)
-     bool hasInlineObject = false;
+@@ -1863,6 +1863,9 @@ void QTextLine::layout_helper(int maxGlyphs)
+     bool reachedEndOfLine = false;
      QFixed maxInlineObjectHeight = 0;
  
 +    bool useWordLikeLayout = eng->option.flags() & QTextOption::WordLikeLayout;
@@ -63,7 +52,7 @@ index dfcbf6a786..ece07a7576 100644
      while (newItem < eng->layoutData->items.size()) {
          lbh.resetRightBearing();
          if (newItem != item) {
-@@ -1905,10 +1908,19 @@ void QTextLine::layout_helper(int maxGlyphs)
+@@ -1934,10 +1937,19 @@ void QTextLine::layout_helper(int maxGlyphs)
                  lbh.tmpData.length++;
                  lbh.calculateRightBearingForPreviousGlyph();
              }
@@ -84,13 +73,17 @@ index dfcbf6a786..ece07a7576 100644
              lbh.whiteSpaceOrObject = true;
              lbh.tmpData.length++;
  
-@@ -1929,11 +1941,13 @@ void QTextLine::layout_helper(int maxGlyphs)
+@@ -1956,30 +1968,49 @@ void QTextLine::layout_helper(int maxGlyphs)
  
              newItem = item + 1;
              ++lbh.glyphCount;
 -            if (lbh.checkFullOtherwiseExtend(line))
 +            if (!useWordLikeLayout && lbh.checkFullOtherwiseExtend(line))
                  goto found;
+ 
+             hasInlineObject = true;
+             maxInlineObjectHeight = qMax(maxInlineObjectHeight, current.ascent + current.descent);
+ 
 -        } else if (attributes[lbh.currentPosition].whiteSpace
 +        } else if (!useWordLikeLayout &&
 +                   attributes[lbh.currentPosition].whiteSpace
@@ -100,7 +93,7 @@ index dfcbf6a786..ece07a7576 100644
              while (lbh.currentPosition < end
                     && attributes[lbh.currentPosition].whiteSpace
                     && eng->layoutData->string.at(lbh.currentPosition).decompositionTag() != QChar::NoBreak) {
-@@ -1941,14 +1955,31 @@ void QTextLine::layout_helper(int maxGlyphs)
+                 addNextCluster(lbh.currentPosition, end, lbh.spaceData, lbh.glyphCount,
                                 current, lbh.logClusters, lbh.glyphs);
              }
 +
@@ -112,7 +105,7 @@ index dfcbf6a786..ece07a7576 100644
 +                lbh.spaceData.length = 0;
                  goto found;
 +            }
-
+ 
              lbh.whiteSpaceOrObject = false;
              bool sb_or_ws = false;
 +            bool canBreak = false;
@@ -129,16 +122,16 @@ index dfcbf6a786..ece07a7576 100644
 +                        break;
 +                    }
 +                }
-+                
++
                  addNextCluster(lbh.currentPosition, end, lbh.tmpData, lbh.glyphCount,
                                 current, lbh.logClusters, lbh.glyphs, &accumulatedTextWidth);
  
-@@ -1963,12 +1991,19 @@ void QTextLine::layout_helper(int maxGlyphs)
+@@ -1992,12 +2023,19 @@ void QTextLine::layout_helper(int maxGlyphs)
                                          && attributes[lbh.currentPosition].whiteSpace
                                          && eng->layoutData->string.at(lbh.currentPosition).decompositionTag() != QChar::NoBreak;
  
 -                if (lbh.currentPosition >= eng->layoutData->string.size()
-+                if (!useWordLikeLayout 
++                if (!useWordLikeLayout
 +                    && (lbh.currentPosition >= eng->layoutData->string.size()
                      || isBreakableSpace
                      || attributes[lbh.currentPosition].lineBreak
@@ -146,7 +139,7 @@ index dfcbf6a786..ece07a7576 100644
 +                    || lbh.tmpData.textWidth >= QFIXED_MAX)) {
                      sb_or_ws = true;
                      break;
-+                } else if (useWordLikeLayout 
++                } else if (useWordLikeLayout
 +                    && (lbh.currentPosition >= eng->layoutData->string.size()
 +                    || (isBreakableSpace && attributes[lbh.currentPosition].lineBreak)
 +                    || lbh.tmpData.textWidth >= QFIXED_MAX)) {
@@ -155,7 +148,7 @@ index dfcbf6a786..ece07a7576 100644
                  } else if (attributes[lbh.currentPosition].graphemeBoundary) {
                      if (breakWordOrAny) {
                          lbh.minw = qMax(accumulatedTextWidth, lbh.minw);
-@@ -2002,7 +2037,8 @@ void QTextLine::layout_helper(int maxGlyphs)
+@@ -2031,7 +2069,8 @@ void QTextLine::layout_helper(int maxGlyphs)
                  lbh.currentSoftHyphenWidth = lbh.glyphs.advances[lbh.logClusters[lbh.currentPosition - 1]];
              }
  
@@ -165,7 +158,7 @@ index dfcbf6a786..ece07a7576 100644
                  // To compute the final width of the text we need to take negative right bearing
                  // into account (negative right bearing means the glyph has pixel data past the
                  // advance length). Note that the negative right bearing is an absolute number,
-@@ -2515,8 +2551,9 @@ void QTextLine::draw_internal(QPainter *p, const QPointF &pos,
+@@ -2641,8 +2680,9 @@ void QTextLine::draw_internal(QPainter *p, const QPointF &origPos,
      const QScriptLine &line = eng->lines[index];
  
      bool noText = (selection && selection->format.property(SuppressText).toBool());
@@ -176,7 +169,7 @@ index dfcbf6a786..ece07a7576 100644
          if (selection
              && selection->start <= line.from
              && selection->start + selection->length > line.from) {
-@@ -2706,7 +2743,28 @@ void QTextLine::draw_internal(QPainter *p, const QPointF &pos,
+@@ -2858,7 +2898,28 @@ void QTextLine::draw_internal(QPainter *p, const QPointF &origPos,
              } else {
                  if (noText)
                      gf.glyphs.numGlyphs = 0; // slightly less elegant than it should be
@@ -207,10 +200,10 @@ index dfcbf6a786..ece07a7576 100644
  
              if ((si.analysis.flags == QScriptAnalysis::Space
 diff --git a/src/gui/text/qtextoption.h b/src/gui/text/qtextoption.h
-index 2955fe8dcc..25a9352308 100644
+index f0a385f..9dabd76 100644
 --- a/src/gui/text/qtextoption.h
 +++ b/src/gui/text/qtextoption.h
-@@ -109,6 +109,7 @@ public:
+@@ -73,6 +73,7 @@ public:
          AddSpaceForLineAndParagraphSeparators = 0x4,
          SuppressColors = 0x8,
          ShowDocumentTerminator = 0x10,
@@ -218,6 +211,3 @@ index 2955fe8dcc..25a9352308 100644
          IncludeTrailingSpaces = 0x80000000,
      };
      Q_DECLARE_FLAGS(Flags, Flag)
--- 
-2.26.1.windows.1
-

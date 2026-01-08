@@ -4,6 +4,8 @@ xcopy %MEMSOURCE_LIB%\qt5-patch-set\qtbase qtbase /S/Y
 
 
 cd qtbase
+"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0000-revert-QTBUG-132075.patch
+
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0100-default-debug-compilation-flags-for-msvc-Od-Ob0.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0101-support-CJK-overwrite-TP-10280.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0102-disable-generating-documentContentChanged-with-rehig.patch
