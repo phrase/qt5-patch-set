@@ -98,7 +98,7 @@ index 5883cc5bbe..bd85dd2831 100644
          painter->setBrushOrigin(painter->brushOrigin().x(), 0);
          painter->fillRect(pos.x(), 0, qCeil(width), qMin(wave.height(), descent), wave);
 @@ -6038,6 +6084,10 @@ static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const
-             painter->drawLine(underline);
+             pen.setWidthF(fe->lineThickness().toReal());
      }
  
 +    if (charFormat.boolProperty( QTextCharFormat::TextMisspelling )) {
