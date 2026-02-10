@@ -13,7 +13,6 @@ cd qtbase
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0106-fix-for-QTBUG-69288.patch
 
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0109-missing-trailingSpaces-in-QTextLineItemIterator.patch
-"C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0110-fix-Ctrl-Tab-on-osx.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0111-ignore-font-8514oem-QTBUG-69634.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0112-process-carriage-return-similar-to-new-line.patch
 "C:\Program Files\Git\usr\bin\patch.exe" -p1 < 0115-always-escape-whitespace-characters-to-keep-newlines.patch

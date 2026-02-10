@@ -26,7 +26,6 @@ apply_patch() {
   apply_patch 0106-fix-for-QTBUG-69288.patch
 
   apply_patch 0109-missing-trailingSpaces-in-QTextLineItemIterator.patch
-  apply_patch 0110-fix-Ctrl-Tab-on-osx.patch
   apply_patch 0112-process-carriage-return-similar-to-new-line.patch
   apply_patch 0115-always-escape-whitespace-characters-to-keep-newlines.patch
 
